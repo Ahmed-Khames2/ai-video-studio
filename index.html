@@ -1,0 +1,2605 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>دليل المخرج الذكي — نظام إنتاج الفيديو والموشن جرافيك البرمجي</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Fira+Code:wght@400;500;600&family=Readex+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      /* Warm Muted Beige / Editorial Stone Palette */
+      --bg-canvas: #F4EFEB;
+      --bg-canvas-subtle: #ECE5DC;
+      --bg-card: #FFFFFF;
+      --bg-card-hover: #FDFBF8;
+      --bg-code: #161413;
+      --border-main: #E2DAD0;
+      --border-subtle: #EAE3D9;
+      --border-accent: #D65A2C;
+      --accent-coral: #D65A2C;
+      --accent-coral-bright: #E2683A;
+      --accent-coral-glow: rgba(214, 90, 44, 0.1);
+      --accent-amber: #B45309;
+      --accent-amber-light: rgba(180, 83, 9, 0.1);
+      --success: #059669;
+      --text-title: #1C1917;
+      --text-body: #44403C;
+      --text-muted: #78716C;
+      --text-dim: #A8A29E;
+      --sidebar-width: 290px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Readex Pro', 'Cairo', sans-serif;
+      background-color: var(--bg-canvas);
+      color: var(--text-body);
+      line-height: 1.8;
+      font-size: 15px;
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* Scrollbars */
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: var(--bg-canvas); }
+    ::-webkit-scrollbar-thumb { background: #D5CCC1; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--accent-coral); }
+
+    /* SVG Icon Helpers */
+    .icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      vertical-align: middle;
+      flex-shrink: 0;
+    }
+    .icon svg {
+      width: 100%;
+      height: 100%;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    /* Sidebar Navigation */
+    aside.sidebar {
+      width: var(--sidebar-width);
+      background: var(--bg-canvas-subtle);
+      border-left: 1px solid var(--border-main);
+      height: 100vh;
+      position: sticky;
+      top: 0;
+      display: flex;
+      flex-direction: column;
+      padding: 26px 18px;
+      overflow-y: auto;
+      flex-shrink: 0;
+      z-index: 50;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding-bottom: 20px;
+      margin-bottom: 20px;
+      border-bottom: 1px solid var(--border-main);
+    }
+    .brand-icon {
+      width: 44px;
+      height: 44px;
+      background: linear-gradient(135deg, var(--accent-coral), #B91C1C);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      box-shadow: 0 4px 14px rgba(214, 90, 44, 0.25);
+    }
+    .brand-title {
+      font-weight: 800;
+      font-size: 15px;
+      color: var(--text-title);
+    }
+    .brand-subtitle {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    nav.toc-nav {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      flex-grow: 1;
+    }
+    nav.toc-nav a {
+      color: var(--text-body);
+      text-decoration: none;
+      padding: 10px 14px;
+      border-radius: 9px;
+      font-size: 13.5px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: all 0.2s ease;
+    }
+    nav.toc-nav a:hover, nav.toc-nav a.active {
+      background: #FFFFFF;
+      color: var(--accent-coral);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+      border-right: 3px solid var(--accent-coral);
+    }
+    nav.toc-nav a .step-num {
+      font-family: 'Fira Code', monospace;
+      font-size: 11.5px;
+      color: var(--text-dim);
+      font-weight: 700;
+    }
+    nav.toc-nav a:hover .step-num {
+      color: var(--accent-coral);
+    }
+
+    .print-btn {
+      margin-top: 15px;
+      padding: 12px;
+      background: #FFFFFF;
+      border: 1px solid var(--border-main);
+      border-radius: 9px;
+      color: var(--text-title);
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: 0.2s;
+    }
+    .print-btn:hover {
+      background: var(--accent-coral);
+      color: #fff;
+      border-color: var(--accent-coral);
+    }
+
+    /* Main Content Area */
+    main.content {
+      flex-grow: 1;
+      padding: 40px 60px 100px;
+      max-width: 1060px;
+      margin: 0 auto;
+    }
+
+    header.hero {
+      padding-bottom: 25px;
+      border-bottom: 1px solid var(--border-main);
+      margin-bottom: 35px;
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--accent-coral-glow);
+      border: 1px solid rgba(214, 90, 44, 0.25);
+      padding: 5px 14px;
+      border-radius: 30px;
+      font-size: 12.5px;
+      font-weight: 700;
+      color: var(--accent-coral);
+      margin-bottom: 14px;
+    }
+    .hero h1 {
+      font-size: 34px;
+      font-weight: 900;
+      line-height: 1.35;
+      margin-bottom: 14px;
+      color: var(--text-title);
+    }
+    .hero p {
+      font-size: 16.5px;
+      color: var(--text-body);
+      max-width: 820px;
+      line-height: 1.85;
+    }
+
+    /* ======================================================== */
+    /* ======================================================== */
+    /* STREAMLINED VISUAL SLIDE DECK (12 Visual Slides) */
+    /* ======================================================== */
+    .slider-wrapper {
+      background: #FFFFFF;
+      border: 1px solid var(--border-main);
+      border-radius: 20px;
+      margin: 24px 0 50px;
+      padding: 24px 30px 28px;
+      box-shadow: 0 8px 24px rgba(68, 64, 60, 0.06);
+      position: relative;
+    }
+    .slider-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .slider-title-minimal {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--accent-coral);
+      font-size: 13.5px;
+      font-weight: 700;
+    }
+    .slider-controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .slide-indicator {
+      font-family: 'Fira Code', monospace;
+      font-size: 13.5px;
+      color: var(--text-title);
+      font-weight: 700;
+      background: var(--bg-canvas-subtle);
+      border: 1px solid var(--border-main);
+      padding: 5px 14px;
+      border-radius: 8px;
+      letter-spacing: 0.5px;
+    }
+    .fullscreen-btn, .slide-btn {
+      width: 38px;
+      height: 38px;
+      background: var(--bg-canvas-subtle);
+      border: 1px solid var(--border-main);
+      border-radius: 9px;
+      color: var(--text-title);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+    .fullscreen-btn:hover, .slide-btn:hover {
+      background: var(--accent-coral);
+      color: #fff;
+      border-color: var(--accent-coral);
+    }
+
+    .slides-container {
+      min-height: 420px;
+      display: flex;
+      align-items: center;
+    }
+    .slide-card {
+      display: none;
+      width: 100%;
+      animation: fadeInSlide 0.28s ease-in-out;
+    }
+    .slide-card.active {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 20px;
+    }
+    @keyframes fadeInSlide {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .slide-heading {
+      font-size: 23px;
+      font-weight: 800;
+      color: var(--text-title);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 0;
+    }
+    .slide-subheading {
+      font-size: 13.5px;
+      color: var(--text-muted);
+      font-weight: 600;
+      margin-top: 3px;
+    }
+
+    /* Speaker Card in Slide 1 */
+    .speaker-card-minimal {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      background: var(--bg-canvas);
+      border: 1px solid var(--border-main);
+      border-radius: 16px;
+      padding: 14px 20px;
+    }
+    .speaker-avatar-wrap {
+      position: relative;
+      flex-shrink: 0;
+    }
+    .speaker-avatar {
+      width: 84px;
+      height: 84px;
+      border-radius: 50%;
+      object-fit: cover;
+      object-position: top center;
+      border: 3px solid var(--accent-coral);
+      box-shadow: 0 4px 14px rgba(214, 90, 44, 0.2);
+    }
+    .speaker-badge-online {
+      position: absolute;
+      bottom: 2px;
+      left: 4px;
+      width: 12px;
+      height: 12px;
+      background: var(--success);
+      border: 2px solid #FFFFFF;
+      border-radius: 50%;
+    }
+    .speaker-name {
+      font-size: 21px;
+      font-weight: 800;
+      color: var(--text-title);
+      margin-bottom: 2px;
+    }
+    .speaker-title-tag {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: var(--accent-coral);
+    }
+
+    /* Visual Grid Rows */
+    .slide-visual-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px;
+    }
+    .slide-visual-row.cols-4 {
+      grid-template-columns: repeat(4, 1fr);
+    }
+    .slide-visual-row.cols-2 {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .slide-visual-row.cols-5 {
+      grid-template-columns: repeat(5, 1fr);
+    }
+
+    .visual-card {
+      background: var(--bg-canvas);
+      border: 1px solid var(--border-main);
+      border-radius: 14px;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      transition: all 0.2s ease;
+    }
+    .visual-card:hover {
+      border-color: var(--accent-coral);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(0,0,0,0.04);
+    }
+    .visual-card.highlight-card {
+      background: #FFFDFB;
+      border-color: var(--accent-coral);
+    }
+    .visual-card-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .visual-card-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 10px;
+      background: #FFFFFF;
+      border: 1px solid var(--border-main);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--accent-coral);
+      flex-shrink: 0;
+    }
+    .visual-card-title {
+      font-size: 15.5px;
+      font-weight: 800;
+      color: var(--text-title);
+      line-height: 1.3;
+    }
+    .visual-card-hint {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+    .visual-card-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+    .visual-card-list li {
+      font-size: 13px;
+      color: var(--text-body);
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      line-height: 1.4;
+    }
+    .visual-card-list li svg {
+      width: 14px;
+      height: 14px;
+      flex-shrink: 0;
+    }
+
+    /* Slider Dots */
+    .slider-dots {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      margin-top: 22px;
+    }
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #D8CFC4;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .dot.active {
+      width: 24px;
+      border-radius: 10px;
+      background: var(--accent-coral);
+    }
+
+    /* FULLSCREEN PRESENTATION MODE */
+    .slider-wrapper:fullscreen {
+      border-radius: 0;
+      margin: 0;
+      padding: 30px 60px 24px;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      background: #F8F5F0;
+      box-sizing: border-box;
+      overflow-y: auto;
+    }
+    .slider-wrapper:fullscreen .slides-container {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 0;
+    }
+    .slider-wrapper:fullscreen .slide-card.active {
+      width: 100%;
+      max-width: 1240px;
+      margin: 0 auto;
+      gap: 28px;
+    }
+    .slider-wrapper:fullscreen .slide-heading {
+      font-size: 28px;
+    }
+    .slider-wrapper:fullscreen .slide-subheading {
+      font-size: 15.5px;
+    }
+    .slider-wrapper:fullscreen .speaker-avatar {
+      width: 105px;
+      height: 105px;
+    }
+    .slider-wrapper:fullscreen .speaker-name {
+      font-size: 25px;
+    }
+    .slider-wrapper:fullscreen .speaker-title-tag {
+      font-size: 15px;
+    }
+    .slider-wrapper:fullscreen .visual-card {
+      padding: 24px;
+      gap: 12px;
+    }
+    .slider-wrapper:fullscreen .visual-card-icon {
+      width: 50px;
+      height: 50px;
+    }
+    .slider-wrapper:fullscreen .visual-card-icon svg {
+      width: 26px !important;
+      height: 26px !important;
+    }
+    .slider-wrapper:fullscreen .visual-card-title {
+      font-size: 18px;
+    }
+    .slider-wrapper:fullscreen .visual-card-hint,
+    .slider-wrapper:fullscreen .visual-card-list li {
+      font-size: 14.5px;
+    }
+
+    @media (max-width: 900px) {
+      .slide-visual-row, .slide-visual-row.cols-4, .slide-visual-row.cols-5 {
+        grid-template-columns: 1fr;
+      }
+      .slide-visual-row.cols-2 {
+        grid-template-columns: 1fr;
+      }
+      .speaker-card-minimal {
+        flex-direction: column;
+        text-align: center;
+      }
+    }
+    
+/* Sections */
+    section.chapter {
+      margin-bottom: 65px;
+      scroll-margin-top: 40px;
+    }
+    .chapter-tag {
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--accent-coral);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 6px;
+      display: block;
+    }
+    .chapter h2 {
+      font-size: 25px;
+      font-weight: 800;
+      color: var(--text-title);
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .chapter h2::after {
+      content: '';
+      flex-grow: 1;
+      height: 1px;
+      background: var(--border-main);
+      margin-right: 14px;
+    }
+
+    /* Cards */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-main);
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 22px;
+      box-shadow: 0 2px 8px rgba(68, 64, 60, 0.03);
+    }
+    .card-title {
+      font-size: 16.5px;
+      font-weight: 700;
+      color: var(--text-title);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* ======================================================== */
+    /* VISUAL FILE TREE COMPONENT (شجرة الملفات المرئية الأنيقة) */
+    /* ======================================================== */
+    .tree-box {
+      background: #FFFFFF;
+      border: 1px solid var(--border-main);
+      border-radius: 16px;
+      padding: 16px 20px;
+      margin: 20px 0;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
+    }
+    .tree-box-header {
+      font-size: 12.5px;
+      font-weight: 700;
+      color: var(--text-muted);
+      padding-bottom: 10px;
+      margin-bottom: 12px;
+      border-bottom: 1px solid var(--border-subtle);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .tree-list {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+    .tree-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 7px 12px;
+      border-radius: 8px;
+      transition: background 0.15s;
+    }
+    .tree-row:hover {
+      background: var(--bg-canvas);
+    }
+    .tree-row.lvl-0 {
+      background: var(--bg-canvas-subtle);
+      font-weight: 800;
+      margin-bottom: 4px;
+    }
+    .tree-row.lvl-1 { margin-right: 18px; border-right: 2px solid var(--border-main); }
+    .tree-row.lvl-2 { margin-right: 38px; border-right: 2px solid var(--border-subtle); }
+    .tree-row.lvl-3 { margin-right: 58px; border-right: 1px dashed var(--border-subtle); }
+
+    .tree-name {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: 'Fira Code', 'Cairo', monospace;
+      font-size: 13px;
+      color: var(--text-title);
+    }
+    .tree-name.folder-name {
+      font-weight: 700;
+      color: var(--accent-coral);
+    }
+    .tree-name.file-name {
+      color: var(--text-body);
+    }
+    .tree-badge {
+      font-size: 11.5px;
+      color: var(--text-muted);
+      background: var(--bg-canvas);
+      padding: 3px 10px;
+      border-radius: 20px;
+      border: 1px solid var(--border-main);
+      white-space: nowrap;
+    }
+    .tree-badge.highlight {
+      background: var(--accent-coral-glow);
+      border-color: rgba(214, 90, 44, 0.3);
+      color: var(--accent-coral);
+      font-weight: 600;
+    }
+
+    /* ======================================================== */
+    /* REMOTION STUDIO MOCKUP COMPONENT (واجهة استوديو ريموشن) */
+    /* ======================================================== */
+    .studio-mockup {
+      background: #181615;
+      border: 1px solid #332F2C;
+      border-radius: 16px;
+      margin: 25px 0;
+      overflow: hidden;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+      color: #EDE8E3;
+    }
+    .studio-topbar {
+      background: #0E0D0C;
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      border-bottom: 1px solid #282422;
+    }
+    .studio-dots {
+      display: flex;
+      gap: 6px;
+    }
+    .studio-dots span {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #443E3A;
+    }
+    .studio-dots span:nth-child(1) { background: #EF4444; }
+    .studio-dots span:nth-child(2) { background: #F59E0B; }
+    .studio-dots span:nth-child(3) { background: #10B981; }
+    .studio-url-pill {
+      background: #1E1B19;
+      border: 1px solid #332F2C;
+      padding: 3px 14px;
+      border-radius: 6px;
+      font-family: 'Fira Code', monospace;
+      font-size: 11.5px;
+      color: #A8A29E;
+      direction: ltr;
+      text-align: left;
+    }
+    .studio-body {
+      display: grid;
+      grid-template-columns: 240px 1fr;
+      min-height: 260px;
+    }
+    .studio-sidebar-panel {
+      background: #131110;
+      border-left: 1px solid #282422;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .studio-panel-title {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: #78716C;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+    }
+    .studio-comp-item {
+      padding: 8px 12px;
+      border-radius: 7px;
+      font-size: 12.5px;
+      font-family: 'Fira Code', monospace;
+      color: #D6D3D1;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: 0.15s;
+    }
+    .studio-comp-item.active {
+      background: var(--accent-coral);
+      color: #fff;
+      font-weight: 600;
+    }
+    .studio-main-viewport {
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      background: #181615;
+    }
+    .studio-player-screen {
+      width: 140px;
+      height: 220px;
+      background: #000;
+      border: 2px solid #332F2C;
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+    }
+    .studio-player-screen::after {
+      content: '9:16 Preview';
+      font-size: 10px;
+      color: #78716C;
+      margin-top: 6px;
+    }
+    .studio-timeline-bar {
+      width: 100%;
+      background: #11100F;
+      border: 1px solid #282422;
+      border-radius: 8px;
+      padding: 8px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-family: 'Fira Code', monospace;
+      font-size: 11.5px;
+      color: #A8A29E;
+    }
+
+    /* Prompt Box with Dark Contrast & Copy Button */
+    .prompt-container {
+      background: var(--bg-code);
+      border: 1px solid #292524;
+      border-radius: 14px;
+      margin: 22px 0;
+      overflow: hidden;
+      box-shadow: 0 6px 20px rgba(28, 25, 23, 0.15);
+    }
+    .prompt-header {
+      background: #201D1B;
+      padding: 10px 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #292524;
+    }
+    .prompt-badge {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'Fira Code', monospace;
+      font-size: 12px;
+      color: var(--accent-coral-bright);
+      font-weight: 600;
+    }
+    .prompt-badge::before {
+      content: '';
+      width: 7px;
+      height: 7px;
+      background: var(--accent-coral);
+      border-radius: 50%;
+      box-shadow: 0 0 8px var(--accent-coral);
+    }
+    .copy-btn {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #fff;
+      padding: 6px 14px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+    .copy-btn:hover {
+      background: var(--accent-coral);
+      color: #fff;
+      border-color: var(--accent-coral);
+    }
+    .copy-btn.copied {
+      background: var(--success);
+      color: #fff;
+      border-color: var(--success);
+    }
+    pre.prompt-body {
+      padding: 22px;
+      font-family: 'Cairo', sans-serif;
+      font-size: 13.5px;
+      line-height: 1.85;
+      color: #F5F1EB;
+      white-space: pre-wrap;
+      word-break: break-word;
+      direction: rtl;
+    }
+
+    /* Tables */
+    .table-wrapper {
+      overflow-x: auto;
+      margin: 18px 0;
+      border-radius: 12px;
+      border: 1px solid var(--border-main);
+      background: #FFFFFF;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: right;
+    }
+    th, td {
+      padding: 13px 18px;
+      border-bottom: 1px solid var(--border-main);
+    }
+    th {
+      background: var(--bg-canvas-subtle);
+      color: var(--text-title);
+      font-weight: 700;
+      font-size: 13px;
+    }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: #FAF8F5; }
+
+    /* Alert / Callout */
+    .alert {
+      padding: 16px 20px;
+      border-radius: 12px;
+      margin: 18px 0;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      font-size: 14px;
+      line-height: 1.7;
+    }
+    .alert-tip {
+      background: #FEF7EE;
+      border: 1px solid #FCD34D;
+      color: #92400E;
+    }
+
+    /* Print Styles */
+    @media print {
+      body { background: #fff !important; color: #000 !important; display: block !important; }
+      aside.sidebar { display: none !important; }
+      main.content { padding: 0 !important; max-width: 100% !important; }
+      .slider-wrapper { display: none !important; }
+      .prompt-container { border: 1px solid #ccc !important; box-shadow: none !important; }
+      .prompt-header { background: #eee !important; color: #000 !important; }
+      pre.prompt-body { color: #000 !important; }
+      .copy-btn, .print-btn { display: none !important; }
+      .card, .tree-box { border: 1px solid #ddd !important; background: #fafafa !important; color: #000 !important; }
+      .studio-mockup { border: 1px solid #ccc !important; background: #fff !important; color: #000 !important; }
+      h1, h2, h3 { color: #000 !important; }
+    }
+
+    @media (max-width: 900px) {
+      body { flex-direction: column; }
+      aside.sidebar { width: 100%; height: auto; position: static; border-left: none; border-bottom: 1px solid var(--border-main); }
+      main.content { padding: 25px 18px; }
+      .hero h1 { font-size: 26px; }
+      .slide-visual-row { grid-template-columns: 1fr; }
+      .studio-body { grid-template-columns: 1fr; }
+      .studio-sidebar-panel { border-left: none; border-bottom: 1px solid #282422; }
+    }
+  
+    /* Speaker Avatar & Presentation Enhancements */
+    .speaker-card {
+      display: flex;
+      align-items: center;
+      gap: 26px;
+      background: var(--bg-canvas);
+      border: 1px solid var(--border-main);
+      border-radius: 16px;
+      padding: 20px 24px;
+      margin-bottom: 20px;
+    }
+    .speaker-avatar-wrap {
+      position: relative;
+      flex-shrink: 0;
+    }
+    .speaker-avatar {
+      width: 105px;
+      height: 105px;
+      border-radius: 50%;
+      object-fit: cover;
+      object-position: top center;
+      border: 3px solid var(--accent-coral);
+      box-shadow: 0 6px 16px rgba(214, 90, 44, 0.22);
+    }
+    .speaker-badge-online {
+      position: absolute;
+      bottom: 4px;
+      left: 6px;
+      width: 14px;
+      height: 14px;
+      background: var(--success);
+      border: 2px solid #FFFFFF;
+      border-radius: 50%;
+    }
+    .speaker-info h3 {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--text-title);
+      margin-bottom: 4px;
+    }
+    .speaker-role {
+      font-size: 13.5px;
+      color: var(--accent-coral);
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .speaker-bio {
+      font-size: 13.5px;
+      color: var(--text-body);
+      line-height: 1.6;
+    }
+    .fullscreen-btn {
+      width: 38px;
+      height: 38px;
+      background: var(--bg-canvas-subtle);
+      border: 1px solid var(--border-main);
+      border-radius: 9px;
+      color: var(--text-title);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+    .fullscreen-btn:hover {
+      background: var(--accent-coral);
+      color: #fff;
+      border-color: var(--accent-coral);
+    }
+    .slider-key-hint {
+      font-size: 12px;
+      color: var(--text-muted);
+      font-family: 'Fira Code', monospace;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .slider-wrapper:fullscreen {
+      border-radius: 0;
+      margin: 0;
+      padding: 40px 60px;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow-y: auto;
+      background: #FDFBF7;
+    }
+    .slider-wrapper:fullscreen .slides-container {
+      min-height: calc(100vh - 200px);
+    }
+    .slider-wrapper:fullscreen .slide-heading {
+      font-size: 32px;
+    }
+    .slider-wrapper:fullscreen .slide-desc {
+      font-size: 17px;
+      max-width: 960px;
+    }
+    .slider-wrapper:fullscreen .visual-node-title {
+      font-size: 16px;
+    }
+    .slider-wrapper:fullscreen .visual-node-text {
+      font-size: 14px;
+    }
+    .slide-compare-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 18px;
+    }
+    .slide-compare-col {
+      background: var(--bg-canvas);
+      border: 1px solid var(--border-main);
+      border-radius: 12px;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .slide-compare-col.highlight-col {
+      border-color: var(--accent-coral);
+      background: #FFFDFB;
+    }
+    .slide-five-pillars {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 12px;
+      margin-top: 20px;
+    }
+    @media (max-width: 900px) {
+      .slide-five-pillars {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .slide-visual-row {
+        grid-template-columns: 1fr;
+      }
+      .slide-compare-grid {
+        grid-template-columns: 1fr;
+      }
+      .speaker-card {
+        flex-direction: column;
+        text-align: center;
+      }
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- Sidebar Navigation -->
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-icon">
+        <span class="icon" style="width: 22px; height: 22px;">
+          <svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+        </span>
+      </div>
+      <div>
+        <div class="brand-title">استوديو الفيديو الذكي</div>
+        <div class="brand-subtitle">AI Video Studio Handbook</div>
+      </div>
+    </div>
+
+    <nav class="toc-nav">
+      <a href="#presentation-deck" class="active"><span class="step-num"><svg viewBox="0 0 24 24" style="width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></span>عرض الشرائح (12 شريحة)</a>
+      <a href="#overview"><span class="step-num">01</span>فلسفة المونتاج البرمجي</a>
+      <a href="#pillars"><span class="step-num">02</span>الأركان الخمسة للهيكل</a>
+      <a href="#setup"><span class="step-num">03</span>أدوات السيت اب (Setup)</a>
+      <a href="#reference"><span class="step-num">04</span>الهوية والمراجع (Reference)</a>
+      <a href="#raw"><span class="step-num">05</span>المادة الخام (Raw Footage)</a>
+      <a href="#projects"><span class="step-num">06</span>مشاريع الفيديوهات (Projects)</a>
+      <a href="#remotion-studio"><span class="step-num">07</span>معاينة Remotion Studio</a>
+      <a href="#exports"><span class="step-num">08</span>التصدير والرندر (Exports)</a>
+      <a href="#workflow"><span class="step-num">09</span>مسار الإنتاج اليومي</a>
+      <a href="#master-prompt"><span class="step-num">10</span>البرومبت الاحترافي الذكي المانع للتكرار</a>
+    </nav>
+
+    <button class="print-btn" onclick="window.print()">
+      <span class="icon" style="width: 16px; height: 16px;"><svg viewBox="0 0 24 24"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg></span>
+      <span>طباعة أو حفظ كـ PDF</span>
+    </button>
+  </aside>
+
+  <!-- Main Content Area -->
+  <main class="content">
+
+    <!-- Header Hero -->
+    <header class="hero">
+      <div class="hero-badge">
+        <span class="icon" style="width: 14px; height: 14px;"><svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg></span>
+        دليل الإخراج الموحد للمخرج الذكي
+      </div>
+      <h1>كتالوج إنتاج الفيديوهات والموشن جرافيك البرمجي</h1>
+      <p>
+        دليل تنفيذي شامل لأي صانع محتوى يريد بناء استوديو فيديو آلي متكامل على جهازه، حيث يتم إنتاج ومونتاج الفيديوهات بدقة الفريم بالاعتماد على الأكواد والذكاء الاصطناعي وبدون برامج مونتاج تقليدية.
+      </p>
+    </header>
+
+        <!-- ======================================================== -->
+    <!-- 12-SLIDE MASTER PRESENTATION DECK (عرض الشرائح التفاعلي الشامل) -->
+        <!-- ======================================================== -->
+    <!-- STREAMLINED 12-SLIDE PRESENTATION DECK -->
+        <!-- ======================================================== -->
+    <!-- STREAMLINED 12-SLIDE PRESENTATION DECK -->
+    <!-- ======================================================== -->
+    <div class="slider-wrapper" id="presentation-deck">
+      <div class="slider-header">
+        <div class="slider-title-minimal">
+          <span class="icon" style="width: 16px; height: 16px;"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg></span>
+          استوديو الفيديو البرمجي
+        </div>
+        <div class="slider-controls">
+          <span class="slide-indicator" id="slideIndicator">شريحة 1 من 12</span>
+          <button class="fullscreen-btn" onclick="toggleFullscreen()" title="عرض ملء الشاشة (F)">
+            <span class="icon" style="width: 17px; height: 17px;"><svg viewBox="0 0 24 24"><polyline points="15 3 21 3 21 9"></polyline><polyline points="9 21 3 21 3 15"></polyline><line x1="21" y1="3" x2="14" y2="10"></line><line x1="3" y1="21" x2="10" y2="14"></line></svg></span>
+          </button>
+          <button class="slide-btn" onclick="prevSlide()" title="السابق">
+            <span class="icon" style="width: 17px; height: 17px;"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></span>
+          </button>
+          <button class="slide-btn" onclick="nextSlide()" title="التالي">
+            <span class="icon" style="width: 17px; height: 17px;"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></span>
+          </button>
+        </div>
+      </div>
+
+      <div class="slides-container">
+        
+        <!-- Slide 01: Ahmed Khames Mohamed -->
+        <div class="slide-card active">
+          <div class="speaker-card-minimal">
+            <div class="speaker-avatar-wrap">
+              <img src="ahmed_khames.jpg" alt="أحمد خميس محمد" class="speaker-avatar" />
+              <span class="speaker-badge-online"></span>
+            </div>
+            <div>
+              <div class="speaker-name">أحمد خميس محمد</div>
+              <div class="speaker-title-tag">مهندس برمجيات</div>
+            </div>
+          </div>
+          <div>
+            <div class="slide-heading">بناء استوديو الفيديو البرمجي الآلي الكامل</div>
+            <div class="slide-subheading">محاور الاستوديو ومنهجية العمل الذاتية</div>
+          </div>
+          <div class="slide-visual-row cols-4">
+            <div class="visual-card">
+              <div class="visual-card-header">
+                <div class="visual-card-icon"><svg viewBox="0 0 24 24" style="width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2;">
+  <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+</svg></div>
+                <div class="visual-card-title">أتمتة كاملة 100%</div>
+              </div>
+              <div class="visual-card-hint">بدون برامج مونتاج تقليدية أو اشتراكات شهرية</div>
+            </div>
+            <div class="visual-card">
+              <div class="visual-card-header">
+                <div class="visual-card-icon"><svg viewBox="0 0 24 24" style="width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2;">
+  <ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(30 12 12)"></ellipse>
+  <ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(-30 12 12)"></ellipse>
+  <polygon points="10 9 15 12 10 15 10 9" fill="currentColor"></polygon>
+</svg></div>
+                <div class="visual-card-title">المونتاج البرمجي</div>
+              </div>
+              <div class="visual-card-hint">كود React + فيزياء حركة + فريمات دقيقة</div>
+            </div>
+            <div class="visual-card">
+              <div class="visual-card-header">
+                <div class="visual-card-icon"><svg viewBox="0 0 24 24" style="width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2;">
+  <line x1="4" y1="10" x2="4" y2="14"></line>
+  <line x1="8" y1="6" x2="8" y2="18"></line>
+  <line x1="12" y1="3" x2="12" y2="21"></line>
+  <line x1="16" y1="6" x2="16" y2="18"></line>
+  <line x1="20" y1="10" x2="20" y2="14"></line>
+</svg></div>
+                <div class="visual-card-title">تكامل الذكاء الاصطناعي</div>
+              </div>
+              <div class="visual-card-hint">تفريغ Whisper ومزامنة الكابشن بالملي ثانية</div>
+            </div>
+            <div class="visual-card">
+              <div class="visual-card-header">
+                <div class="visual-card-icon"><svg viewBox="0 0 24 24" style="width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2;">
+  <rect x="2" y="3" width="20" height="15" rx="2"></rect>
+  <line x1="7" y1="21" x2="17" y2="21"></line>
+  <line x1="12" y1="18" x2="12" y2="21"></line>
+</svg></div>
+                <div class="visual-card-title">مخرجات سينمائية 4K</div>
+              </div>
+              <div class="visual-card-hint">هوية بصرية موحدة وفيديوهات عالية الجودة</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Slide 02: Manual vs Code-Driven Paradigm -->
+        <div class="slide-card">
+          <div>
+            <div class="slide-heading">نقلة المونتاج البرمجي (The Paradigm Shift)</div>
+            <div class="slide-subheading">Write Once, Render Infinitely</div>
+          </div>
+          <div class="slide-visual-row cols-2">
+            <div class="visual-card" style="border-right: 4px solid #DC2626;">
+              <div class="visual-card-header">
+                <div class="visual-card-icon" style="color: #DC2626;"><svg viewBox="0 0 24 24" style="width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2;">
+  <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+  <line x1="6" y1="4" x2="6" y2="20"></line>
+  <line x1="18" y1="4" x2="18" y2="20"></line>
+  <polygon points="10 9 15 12 10 15 10 9" fill="currentColor"></polygon>
+</svg></div>
+                <div class="visual-card-title">المونتاج اليدوي التقليدي</div>
+              </div>
+              <ul class="visual-card-list">
+                <li><svg viewBox="0 0 24 24" style="stroke: #DC2626; fill:none; stroke-width:2.5;"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg> استنزاف مئات الساعات في التقطيع اليدوي وسحب الطبقات</li>
+                <li><svg viewBox="0 0 24 24" style="stroke: #DC2626; fill:none; stroke-width:2.5;"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg> كراشات البرامج الثقيلة وبطء الريندر</li>
+                <li><svg viewBox="0 0 24 24" style="stroke: #DC2626; fill:none; stroke-width:2.5;"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg> صعوبة التعديل وإعادة العمل من الصفر لكل فيديو</li>
+              </ul>
+            </div>
+            <div class="visual-card highlight-card" style="border-right: 4px solid var(--accent-coral);">
+              <div class="visual-card-header">
+                <div class="visual-card-icon"><svg viewBox="0 0 24 24" style="width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2;">
+  <ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(30 12 12)"></ellipse>
+  <ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(-30 12 12)"></ellipse>
+  <polygon points="10 9 15 12 10 15 10 9" fill="currentColor"></polygon>
+</svg></div>
+                <div class="visual-card-title">استوديو الفيديو البرمجي الآلي</div>
+              </div>
+              <ul class="visual-card-list">
+                <li><svg viewBox="0 0 24 24" style="stroke: #16A34A; fill:none; stroke-width:2.5;"><polyline points="20 6 9 17 4 12"></polyline></svg> كود React معياري وقابل لإعادة الاستخدام بنقرة زر</li>
+                <li><svg viewBox="0 0 24 24" style="stroke: #16A34A; fill:none; stroke-width:2.5;"><polyline points="20 6 9 17 4 12"></polyline></svg> مزامنة آلية بالذكاء الاصطناعي مع الصوت بدقة الفريم</li>
+                <li><svg viewBox="0 0 24 24" style="stroke: #16A34A; fill:none; stroke-width:2.5;"><polyline points="20 6 9 17 4 12"></polyline></svg> تعديل كامل للفيديو بتغيير سطر برمجي واحد</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Slide 03: Antigravity Ecosystem CLI vs IDE -->
+        <div class="slide-card">
+          <div>
+            <div class="slide-heading">منصة العمل: Antigravity CLI مقابل Antigravity IDE</div>
+            <div class="slide-subheading">اختر الواجهة الأنسب لأسلوب عملك</div>
+          </div>
+          <div class="slide-visual-row cols-2">
+            <div class="visual-card">
+              <div class="visual-card-header">
+                <div class="visual-card-icon"><svg viewBox="0 0 24 24" style="width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2;">
+  <rect x="2" y="3" width="20" height="16" rx="3"></rect>
+  <polyline points="6 8 10 11 6 14"></polyline>
+  <line x1="12" y1="14" x2="16" y2="14"></line>
+</svg></div>
+                <div class="visual-card-title">Antigravity CLI (الطرفية الذكية)</div>
+              </div>
+              <ul class="visual-card-list">
+                <li><svg viewBox="0 0 24 24" style="stroke: var(--accent-coral); fill:none; stroke-width:2.5;"><polyline points="9 18 15 12 9 6"></polyline></svg> تشغيل فوري عبر سطر الأوامر (Terminal) بخفة تامة</li>
+                <li><svg viewBox="0 0 24 24" style="stroke: var(--accent-coral); fill:none; stroke-width:2.5;"><polyline points="9 18 15 12 9 6"></polyline></svg> تنفيذ أوامر الريندر والتصدير في الخلفية</li>
+                <li><svg viewBox="0 0 24 24" style="stroke: var(--accent-coral); fill:none; stroke-width:2.5;"><polyline points="9 18 15 12 9 6"></polyline></svg> أتمتة صامتة بدون استهلاك موارد الشاشة والمعالج</li>
+              </ul>
+            </div>
+            <div class="visual-card highlight-card">
+              <div class="visual-card-header">
+                <div class="visual-card-icon"><svg viewBox="0 0 24 24" style="width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2;">
+  <rect x="2" y="3" width="20" height="18" rx="2"></rect>
+  <line x1="7" y1="3" x2="7" y2="21"></line>
+  <line x1="2" y1="8" x2="22" y2="8"></line>
+  <line x1="11" y1="13" x2="17" y2="13"></line>
+  <line x1="11" y1="17" x2="15" y2="17"></line>
+</svg></div>
+                <div class="visual-card-title">Antigravity IDE (بيئة التطوير المتكاملة)</div>
+              </div>
+              <ul class="visual-card-list">
+                <li><svg viewBox="0 0 24 24" style="stroke: var(--accent-coral); fill:none; stroke-width:2.5;"><polyline points="9 18 15 12 9 6"></polyline></svg> محرر كود بصري متقدم واستعراض حي لشجرة الملفات</li>
+                <li><svg viewBox="0 0 24 24" style="stroke: var(--accent-coral); fill:none; stroke-width:2.5;"><polyline points="9 18 15 12 9 6"></polyline></svg> متابعة مرئية لفرق الوكلاء الأذكياء (Swarms)</li>
+                <li><svg viewBox="0 0 24 24" style="stroke: var(--accent-coral); fill:none; stroke-width:2.5;"><polyline points="9 18 15 12 9 6"></polyline></svg> استعراض نتائج التنفيذ والكود لحظة بلحظة</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Slide 04: NEW: Why Node.js and Python? -->
+        <div class="slide-card">
+          <div>
+            <div class="slide-heading">المتطلبات الأساسية: لماذا نحتاج Node.js و Python؟</div>
+            <div class="slide-subheading">البيئة التحتية لتشغيل المونتاج البرمجي والذكاء الاصطناعي</div>
+          </div>
+          <div class="slide-visual-row cols-2">
+            <div class="visual-card highlight-card" style="border-right: 4px solid var(--accent-coral);">
+              <div class="visual-card-header">
+                <div class="visual-card-icon"><svg viewBox="0 0 24 24" style="width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2;">
+  <path d="M12 2l8 4.5v9l-8 4.5-8-4.5v-9l8-4.5z"></path>
+  <path d="M12 12l8-4.5M12 12v9M12 12L4 7.5"></path>
+</svg></div>
+                <div>
+                  <div class="visual-card-title">لماذا نحتاج Node.js؟</div>
+                  <div class="visual-card-hint" style="color:var(--accent-coral); font-weight:700;">محرك تشغيل Remotion و React</div>
+                </div>
+              </div>
+              <ul class="visual-card-list">
+                <li><svg viewBox="0 0 24 24" style="stroke: var(--accent-coral); fill:none; stroke-width:2.5;"><polyline points="9 18 15 12 9 6"></polyline></svg> <strong>تشغيل React البرمجي:</strong> محرك Remotion مبني بالكامل على React، ويحتاج بيئة Node.js لتنفيذ أكواد JavaScript و TypeScript.</li>
+                <li><svg viewBox="0 0 24 24" style="stroke: var(--accent-coral); fill:none; stroke-width:2.5;"><polyline points="9 18 15 12 9 6"></polyline></svg> <strong>سيرفر المعاينة الحي:</strong> تشغيل استوديو Remotion التفاعلي في المتصفح عبر (Local Dev Server) لمعاينة التايم لاين لحظياً.</li>
+                <li><svg viewBox="0 0 24 24" style="stroke: var(--accent-coral); fill:none; stroke-width:2.5;"><polyline points="9 18 15 12 9 6"></polyline></svg> <strong>ريندر الفريمات:</strong> محرك تصيير الفيديو الذي يحول مكونات الكود إلى فريمات فيديو وصور بدقة 4K.</li>
+              </ul>
+            </div>
+            <div class="visual-card" style="border-right: 4px solid var(--accent-amber);">
+              <div class="visual-card-header">
+                <div class="visual-card-icon" style="color:var(--accent-amber);"><svg viewBox="0 0 24 24" style="width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2;">
+  <path d="M12 2c-3.3 0-5 1.5-5 3.5v2h5v1H5c-2 0-3.5 1.7-3.5 5 0 3.3 1.5 5 3.5 5h1.5v-2c0-2 1.7-3.5 5-3.5h3v-1H9.5c-2 0-3.5-1.7-3.5-5 0-3.3 1.5-5 5-5H12z"></path>
+  <circle cx="8.5" cy="4.5" r="0.8" fill="currentColor"></circle>
+  <circle cx="15.5" cy="19.5" r="0.8" fill="currentColor"></circle>
+</svg></div>
+                <div>
+                  <div class="visual-card-title">لماذا نحتاج Python؟</div>
+                  <div class="visual-card-hint" style="color:var(--accent-amber); font-weight:700;">محرك الذكاء الاصطناعي وهندسة الصوت</div>
+                </div>
+              </div>
+              <ul class="visual-card-list">
+                <li><svg viewBox="0 0 24 24" style="stroke: var(--accent-coral); fill:none; stroke-width:2.5;"><polyline points="9 18 15 12 9 6"></polyline></svg> <strong>تشغيل نموذج Whisper:</strong> نموذج الذكاء الاصطناعي لتفريغ الصوت بدقة متناهية يعمل حصرياً على بيئة Python.</li>
+                <li><svg viewBox="0 0 24 24" style="stroke: var(--accent-coral); fill:none; stroke-width:2.5;"><polyline points="9 18 15 12 9 6"></polyline></svg> <strong>توقيت الكلمات بالملي ثانية:</strong> استخراج التوقيت الزمني الدقيق للكلمات لمزامنة الكابشن وحركات الموشن مع صوتك.</li>
+                <li><svg viewBox="0 0 24 24" style="stroke: var(--accent-coral); fill:none; stroke-width:2.5;"><polyline points="9 18 15 12 9 6"></polyline></svg> <strong>أتمتة الوسائط والبيانات:</strong> سكريبتات الربط الذكي، معالجة ملفات الصوت، والتحكم في أوامر FFmpeg.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Slide 05: Motion Graphics by Code -->
+        <div class="slide-card">
+          <div>
+            <div class="slide-heading">هندسة الموشن جرافيكس: كيف يتحول الكود إلى حركة؟</div>
+            <div class="slide-subheading">تحريك سينمائي بدون شريط التايم لاين التقليدي</div>
+          </div>
+          <div class="slide-visual-row">
+            <div class="visual-card">
+              <div class="visual-card-header">
+                <div class="visual-card-icon"><svg viewBox="0 0 24 24" style="width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2;">
+  <ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(30 12 12)"></ellipse>
+  <ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(-30 12 12)"></ellipse>
+  <polygon points="10 9 15 12 10 15 10 9" fill="currentColor"></polygon>
+</svg></div>
+                <div class="visual-card-title">مكونات React المعيارية</div>
+              </div>
+              <div class="visual-card-hint">كل بطاقة، سهم، أو رسم هو Component نظيف ومعزول يمكن تكراره في أي مشهد.</div>
+            </div>
+            <div class="visual-card">
+              <div class="visual-card-header">
+                <div class="visual-card-icon"><svg viewBox="0 0 24 24" style="width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2;">
+  <path d="M4 12c2-4 4-4 6 0s4 4 6 0 4-4 6 0"></path>
+  <circle cx="20" cy="12" r="2" fill="currentColor"></circle>
+</svg></div>
+                <div class="visual-card-title">فيزياء الحركة (Spring Physics)</div>
+              </div>
+              <div class="visual-card-hint">حركة انسيابية طبيعية تمتع العين بمعادلات الزنبرك الرياضية دون كي فريمز ميتة.</div>
+            </div>
+            <div class="visual-card">
+              <div class="visual-card-header">
+                <div class="visual-card-icon"><svg viewBox="0 0 24 24" style="width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2;">
+  <circle cx="12" cy="12" r="9"></circle>
+  <polyline points="12 7 12 12 15 15"></polyline>
+</svg></div>
+                <div class="visual-card-title">مزامنة الفريمات الصوتية</div>
+              </div>
+              <div class="visual-card-hint">ربط زمن ظهور كل عنصر مع الفريم المطابق لكلمات الصوت بدقة الملي ثانية.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Slide 06: Core Tech Stack -->
+        <div class="slide-card">
+          <div>
+            <div class="slide-heading">محركات الإنتاج الثلاثية: الترسانة التقنية</div>
+            <div class="slide-subheading">أدوات قياسية مجانية ومفتوحة المصدر</div>
+          </div>
+          <div class="slide-visual-row">
+            <div class="visual-card">
+              <div class="visual-card-header">
+                <div class="visual-card-icon"><svg viewBox="0 0 24 24" style="width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2;">
+  <path d="M12 2l8 4.5v9l-8 4.5-8-4.5v-9l8-4.5z"></path>
+  <path d="M12 12l8-4.5M12 12v9M12 12L4 7.5"></path>
+</svg></div>
+                <div class="visual-card-title">Node.js & Remotion</div>
+              </div>
+              <div class="visual-card-hint">محرك المونتاج البرمجي وتصيير المشاهد وإدارة التايم لاين بـ React.</div>
+            </div>
+            <div class="visual-card">
+              <div class="visual-card-header">
+                <div class="visual-card-icon"><svg viewBox="0 0 24 24" style="width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2;">
+  <path d="M12 2c-3.3 0-5 1.5-5 3.5v2h5v1H5c-2 0-3.5 1.7-3.5 5 0 3.3 1.5 5 3.5 5h1.5v-2c0-2 1.7-3.5 5-3.5h3v-1H9.5c-2 0-3.5-1.7-3.5-5 0-3.3 1.5-5 5-5H12z"></path>
+  <circle cx="8.5" cy="4.5" r="0.8" fill="currentColor"></circle>
+  <circle cx="15.5" cy="19.5" r="0.8" fill="currentColor"></circle>
+</svg></div>
+                <div class="visual-card-title">Python & Whisper</div>
+              </div>
+              <div class="visual-card-hint">محرك الذكاء الاصطناعي للتفريغ الصوتي وتوقيت الكلمات بالملي ثانية.</div>
+            </div>
+            <div class="visual-card">
+              <div class="visual-card-header">
+                <div class="visual-card-icon"><svg viewBox="0 0 24 24" style="width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2;">
+  <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+  <line x1="6" y1="4" x2="6" y2="20"></line>
+  <line x1="18" y1="4" x2="18" y2="20"></line>
+  <polygon points="10 9 15 12 10 15 10 9" fill="currentColor"></polygon>
+</svg></div>
+                <div class="visual-card-title">FFmpeg المحمول</div>
+              </div>
+              <div class="visual-card-hint">معالجة الوسائط وتطبيع الصوت معيارياً لمستوى (-16 LUFS) وقص الفيديو.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Slide 07: The 5 Pillars Overview -->
+        <div class="slide-card">
+          <div>
+            <div class="slide-heading">الهيكل الخماسي للاستوديو (The 5 Pillars)</div>
+            <div class="slide-subheading">نظام شجري صارم لحماية المشاريع من التشتت</div>
+          </div>
+          <div class="slide-visual-row cols-5">
+            <div class="visual-card">
+              <div class="visual-card-icon"><svg viewBox="0 0 24 24" style="width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2;">
+  <circle cx="12" cy="12" r="3"></circle>
+  <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+</svg></div>
+              <div class="visual-card-title" style="font-size:14px; color:var(--accent-coral);">01. Setup</div>
+              <div class="visual-card-hint" style="font-size:12px;">الأدوات والمهارات</div>
+            </div>
+            <div class="visual-card">
+              <div class="visual-card-icon"><svg viewBox="0 0 24 24" style="width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2;">
+  <circle cx="12" cy="12" r="10"></circle>
+  <circle cx="12" cy="7" r="1.5" fill="currentColor"></circle>
+  <circle cx="16" cy="11" r="1.5" fill="currentColor"></circle>
+  <circle cx="8" cy="11" r="1.5" fill="currentColor"></circle>
+  <circle cx="12" cy="16" r="1.5" fill="currentColor"></circle>
+</svg></div>
+              <div class="visual-card-title" style="font-size:14px; color:var(--accent-amber);">02. Reference</div>
+              <div class="visual-card-hint" style="font-size:12px;">الهوية والستايلات</div>
+            </div>
+            <div class="visual-card">
+              <div class="visual-card-icon"><svg viewBox="0 0 24 24" style="width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2;">
+  <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+  <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+  <line x1="12" y1="19" x2="12" y2="23"></line>
+  <line x1="8" y1="23" x2="16" y2="23"></line>
+</svg></div>
+              <div class="visual-card-title" style="font-size:14px;">03. Raw Footage</div>
+              <div class="visual-card-hint" style="font-size:12px;">الصوت والتفريغ</div>
+            </div>
+            <div class="visual-card">
+              <div class="visual-card-icon"><svg viewBox="0 0 24 24" style="width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2;">
+  <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+</svg></div>
+              <div class="visual-card-title" style="font-size:14px; color:var(--accent-coral-bright);">04. Projects</div>
+              <div class="visual-card-hint" style="font-size:12px;">كود المشاهد</div>
+            </div>
+            <div class="visual-card">
+              <div class="visual-card-icon"><svg viewBox="0 0 24 24" style="width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2;">
+  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+  <polyline points="7 10 12 15 17 10"></polyline>
+  <line x1="12" y1="15" x2="12" y2="3"></line>
+</svg></div>
+              <div class="visual-card-title" style="font-size:14px; color:var(--success);">05. Exports</div>
+              <div class="visual-card-hint" style="font-size:12px;">تصديرات 4K</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Slide 08: Pillar 1: Setup & Tools -->
+        <div class="slide-card">
+          <div>
+            <div class="slide-heading">الركيزة 01: التأسيس والتجهيز التلقائي</div>
+            <div class="slide-subheading">جاهزية البيئة البرمجية بنقرة واحدة</div>
+          </div>
+          <div class="slide-visual-row">
+            <div class="visual-card">
+              <div class="visual-card-header">
+                <div class="visual-card-icon"><svg viewBox="0 0 24 24" style="width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2;">
+  <circle cx="12" cy="12" r="3"></circle>
+  <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+</svg></div>
+                <div class="visual-card-title">فحص النظام الذاتي</div>
+              </div>
+              <div class="visual-card-hint">فحص Node.js و Python ومسار FFmpeg وضبط البيئة تلقائياً في الخلفية.</div>
+            </div>
+            <div class="visual-card">
+              <div class="visual-card-header">
+                <div class="visual-card-icon"><svg viewBox="0 0 24 24" style="width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2;">
+  <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+</svg></div>
+                <div class="visual-card-title">تثبيت مهارات الذكاء الاصطناعي</div>
+              </div>
+              <div class="visual-card-hint">تزويد Antigravity بمهارات Remotion وقواعد التصميم والموشن جرافيكس.</div>
+            </div>
+            <div class="visual-card">
+              <div class="visual-card-header">
+                <div class="visual-card-icon"><svg viewBox="0 0 24 24" style="width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2;">
+  <circle cx="12" cy="12" r="9"></circle>
+  <polyline points="12 7 12 12 15 15"></polyline>
+</svg></div>
+                <div class="visual-card-title">صفر إعدادات يدوية</div>
+              </div>
+              <div class="visual-card-hint">تجهيز كامل في ثوانٍ معدودة دون الدخول في تفاصيل التثبيت المعقدة.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Slide 09: Pillar 2: Reference & Brand Identity -->
+        <div class="slide-card">
+          <div>
+            <div class="slide-heading">الركيزة 02: تثبيت الهوية والمراجع</div>
+            <div class="slide-subheading">البصمة البصرية في مجلد 00_My_Brand_Identity</div>
+          </div>
+          <div class="slide-visual-row">
+            <div class="visual-card">
+              <div class="visual-card-header">
+                <div class="visual-card-icon"><svg viewBox="0 0 24 24" style="width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2;">
+  <circle cx="12" cy="12" r="10"></circle>
+  <circle cx="12" cy="7" r="1.5" fill="currentColor"></circle>
+  <circle cx="16" cy="11" r="1.5" fill="currentColor"></circle>
+  <circle cx="8" cy="11" r="1.5" fill="currentColor"></circle>
+  <circle cx="12" cy="16" r="1.5" fill="currentColor"></circle>
+</svg></div>
+                <div class="visual-card-title">استخراج الأنماط (Style Extraction)</div>
+              </div>
+              <div class="visual-card-hint">تفكيك أسلوب حركة الفيديوهات الملهمة وتحويلها إلى كود وقواعد واضحة.</div>
+            </div>
+            <div class="visual-card">
+              <div class="visual-card-header">
+                <div class="visual-card-icon"><svg viewBox="0 0 24 24" style="width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2;">
+  <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+</svg></div>
+                <div class="visual-card-title">00_My_Brand_Identity</div>
+              </div>
+              <div class="visual-card-hint">تثبيت أكواد ألوانك، الخطوط، وتنسيق الكروت كمرجع ثابت لكل الفيديوهات.</div>
+            </div>
+            <div class="visual-card highlight-card">
+              <div class="visual-card-header">
+                <div class="visual-card-icon" style="color:var(--accent-coral);"><svg viewBox="0 0 24 24" style="width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2;">
+  <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+</svg></div>
+                <div class="visual-card-title">المحاكاة البصرية الصارمة</div>
+              </div>
+              <div class="visual-card-hint"><strong>عناوين حرة ورسوم توضيحية فقط (Literal Simulation)</strong> دون أي بوكسات خلفية، وصفر إيموجي تماماً.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Slide 10: Pillar 3: Raw Footage & Audio -->
+        <div class="slide-card">
+          <div>
+            <div class="slide-heading">الركيزة 03: المادة الخام وهندسة الصوت</div>
+            <div class="slide-subheading">الصوت هو القائد الحقيقي للمونتاج البرمجي</div>
+          </div>
+          <div class="slide-visual-row">
+            <div class="visual-card">
+              <div class="visual-card-header">
+                <div class="visual-card-icon"><svg viewBox="0 0 24 24" style="width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2;">
+  <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+  <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+  <line x1="12" y1="19" x2="12" y2="23"></line>
+  <line x1="8" y1="23" x2="16" y2="23"></line>
+</svg></div>
+                <div class="visual-card-title">حفظ التسجيل الخام</div>
+              </div>
+              <div class="visual-card-hint">وضع ملف الصوت (MP3/WAV) أو تصوير الشاشة في مجلد الحلقة المنظم.</div>
+            </div>
+            <div class="visual-card">
+              <div class="visual-card-header">
+                <div class="visual-card-icon"><svg viewBox="0 0 24 24" style="width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2;">
+  <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+  <line x1="6" y1="4" x2="6" y2="20"></line>
+  <line x1="18" y1="4" x2="18" y2="20"></line>
+  <polygon points="10 9 15 12 10 15 10 9" fill="currentColor"></polygon>
+</svg></div>
+                <div class="visual-card-title">تطبيع الصوت المعياري</div>
+              </div>
+              <div class="visual-card-hint">معالجة الصوت تلقائياً بـ FFmpeg لمعيار النقاء العالمي (-16 LUFS).</div>
+            </div>
+            <div class="visual-card">
+              <div class="visual-card-header">
+                <div class="visual-card-icon"><svg viewBox="0 0 24 24" style="width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2;">
+  <line x1="4" y1="10" x2="4" y2="14"></line>
+  <line x1="8" y1="6" x2="8" y2="18"></line>
+  <line x1="12" y1="3" x2="12" y2="21"></line>
+  <line x1="16" y1="6" x2="16" y2="18"></line>
+  <line x1="20" y1="10" x2="20" y2="14"></line>
+</svg></div>
+                <div class="visual-card-title">تفريغ الكلمات بـ Whisper</div>
+              </div>
+              <div class="visual-card-hint">استخراج توقيت الكلمات بالملي ثانية لاستخدامه في تحريك عناصر الموشن.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Slide 11: Pillar 4: Projects & Remotion Studio -->
+        <div class="slide-card">
+          <div>
+            <div class="slide-heading">الركيزة 04: هندسة الكبسولة المستقلة والمعاينة اللحظية</div>
+            <div class="slide-subheading">العزل التام للمشاريع في Projects/ ومحرك Remotion النقي</div>
+          </div>
+          <div class="slide-visual-row">
+            <div class="visual-card">
+              <div class="visual-card-header">
+                <div class="visual-card-icon"><svg viewBox="0 0 24 24" style="width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2;">
+  <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+</svg></div>
+                <div class="visual-card-title">الكبسولة المعزولة (Projects/Video_XX)</div>
+              </div>
+              <div class="visual-card-hint">كل فيديو يحتوي كامل مشاهده، مكوناته، وكابشنه داخل فولدَره الخاص لمنع أي تداخل أنماط.</div>
+            </div>
+            <div class="visual-card">
+              <div class="visual-card-header">
+                <div class="visual-card-icon"><svg viewBox="0 0 24 24" style="width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2;">
+  <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+  <polyline points="2 17 12 22 22 17"></polyline>
+  <polyline points="2 12 12 17 22 12"></polyline>
+</svg></div>
+                <div class="visual-card-title">Remotion كـ Pure Runner</div>
+              </div>
+              <div class="visual-card-hint">محرك تشغيل مجرد ونظيف يستدعي الكبسولة مباشرة دون تراكم أو تلويث لملفات Remotion.</div>
+            </div>
+            <div class="visual-card">
+              <div class="visual-card-header">
+                <div class="visual-card-icon"><svg viewBox="0 0 24 24" style="width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2;">
+  <polyline points="3 6 5 6 21 6"></polyline>
+  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+</svg></div>
+                <div class="visual-card-title">المسح اللحظي لصور المعاينة</div>
+              </div>
+              <div class="visual-card-hint">أي لقطة معاينة مؤقتة تُفحص وتُحذف فوراً لمنع تراكم الملفات العشوائية.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Slide 12: Pillar 5: Exports & Renders -->
+        <div class="slide-card">
+          <div>
+            <div class="slide-heading">الركيزة 05: التصدير النهائي والصور المصغرة</div>
+            <div class="slide-subheading">تحويل الكود إلى ملفات فيديو سينمائية جاهزة للنشر</div>
+          </div>
+          <div class="slide-visual-row">
+            <div class="visual-card">
+              <div class="visual-card-header">
+                <div class="visual-card-icon"><svg viewBox="0 0 24 24" style="width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2;">
+  <rect x="2" y="3" width="20" height="15" rx="2"></rect>
+  <line x1="7" y1="21" x2="17" y2="21"></line>
+  <line x1="12" y1="18" x2="12" y2="21"></line>
+</svg></div>
+                <div class="visual-card-title">ريندر فائق 4K / 60fps</div>
+              </div>
+              <div class="visual-card-hint">ملف MP4 بأعلى دقة ونقاء ألوان متوافق تماماً مع منصات الفيديو.</div>
+            </div>
+            <div class="visual-card">
+              <div class="visual-card-header">
+                <div class="visual-card-icon"><svg viewBox="0 0 24 24" style="width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2;">
+  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+  <polyline points="7 10 12 15 17 10"></polyline>
+  <line x1="12" y1="15" x2="12" y2="3"></line>
+</svg></div>
+                <div class="visual-card-title">معاينات سريعة (previews/)</div>
+              </div>
+              <div class="visual-card-hint">عينات خفيفة لفحص جودة الحركة والصوت خلال ثوانٍ قبل الريندر النهائي.</div>
+            </div>
+            <div class="visual-card">
+              <div class="visual-card-header">
+                <div class="visual-card-icon"><svg viewBox="0 0 24 24" style="width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2;">
+  <circle cx="12" cy="12" r="10"></circle>
+  <circle cx="12" cy="7" r="1.5" fill="currentColor"></circle>
+  <circle cx="16" cy="11" r="1.5" fill="currentColor"></circle>
+  <circle cx="8" cy="11" r="1.5" fill="currentColor"></circle>
+  <circle cx="12" cy="16" r="1.5" fill="currentColor"></circle>
+</svg></div>
+                <div class="visual-card-title">غلاف تلقائي (Thumbnail PNG)</div>
+              </div>
+              <div class="visual-card-hint">التقاط فريم سينمائي من كود الموشن كصورة غلاف متناسقة مع ألوان الفيديو.</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Slider Dots for 12 Slides -->
+      <div class="slider-dots">
+        <span class="dot active" onclick="goToSlide(0)" title="1"></span>
+        <span class="dot" onclick="goToSlide(1)" title="2"></span>
+        <span class="dot" onclick="goToSlide(2)" title="3"></span>
+        <span class="dot" onclick="goToSlide(3)" title="4"></span>
+        <span class="dot" onclick="goToSlide(4)" title="5"></span>
+        <span class="dot" onclick="goToSlide(5)" title="6"></span>
+        <span class="dot" onclick="goToSlide(6)" title="7"></span>
+        <span class="dot" onclick="goToSlide(7)" title="8"></span>
+        <span class="dot" onclick="goToSlide(8)" title="9"></span>
+        <span class="dot" onclick="goToSlide(9)" title="10"></span>
+        <span class="dot" onclick="goToSlide(10)" title="11"></span>
+        <span class="dot" onclick="goToSlide(11)" title="12"></span>
+      </div>
+    </div>
+
+
+    <!-- Chapter 1: Overview -->
+    <section class="chapter" id="overview">
+      <span class="chapter-tag">الفلسفة والأساس</span>
+      <h2>نظرة عامة على المونتاج البرمجي</h2>
+      <p>
+        المونتاج البرمجي هو الانتقال من القص واللصق اليدوي إلى <strong>بناء الفيديو عبر الكود والأتمتة</strong>. يربط النظام بين محرك <strong>Remotion</strong> الذي يتيح برمجة العناصر بـ React، ونماذج الذكاء الاصطناعي <strong>Whisper</strong> التي توفر توقيت الكلمات بالملي ثانية.
+      </p>
+
+      <div class="card" style="margin-top: 18px;">
+        <div class="card-title">
+          <span class="icon" style="width: 18px; height: 18px; color: var(--accent-coral);"><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg></span>
+          المزايا الجوهرية لمنظومة الإنتاج بالكود
+        </div>
+        <ul style="padding-right: 20px; line-height: 2; color: var(--text-body);">
+          <li><strong>تزامن مطلق مع الصوت:</strong> لا حاجة لقص الصوت وضبط الكابشن يدوياً؛ الكود يقرأ ملف التوقيت الزمني ويحرك الكلمة لحظة نطقها.</li>
+          <li><strong>ثبات الهوية البصرية:</strong> لا تتغير ألوانك أو خطوطك بالخطأ، لأنها مسجلة كقيم برمجية ثابتة تطبق على جميع المشاهد.</li>
+          <li><strong>المشاهد المعزولة:</strong> كل مشهد هو مكون برمجي منفصل؛ يمكنك تعديل المشهد الأخير دون لمس بداية الفيديو.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Chapter 2: The 5 Pillars -->
+    <section class="chapter" id="pillars">
+      <span class="chapter-tag">الهيكل المعتمد</span>
+      <h2>الأركان الخمسة للهيكل (The 5 Pillars)</h2>
+      <p>تم تقسيم مساحة العمل إلى 5 مجلدات أساسية محددة المسؤوليات بدقة:</p>
+
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>المجلد</th>
+              <th>الوظيفة والمسؤولية</th>
+              <th>نوع الملفات</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>1. Setup_and_Tools</strong></td>
+              <td>أدوات النظام، بيئة بايثون، سكربتات Whisper، وكتالوج مهارات الموشن.</td>
+              <td>سكربتات <code>.py</code> و <code>.ps1</code> والمهارات</td>
+            </tr>
+            <tr>
+              <td><strong>2. Reference</strong></td>
+              <td>خزينة هويتك الشخصية + غرف المراجع المعزولة لدراسة أساليب الحركة.</td>
+              <td>فيديوهات مرجعية وملفات <code>.md</code> و <code>.json</code></td>
+            </tr>
+            <tr>
+              <td><strong>3. Raw_Footage</strong></td>
+              <td>المادة الخام القادمة من الخارج قبل البدء في المونتاج.</td>
+              <td>فويس أوفر، موسيقى، لقطات شاشة، مؤثرات</td>
+            </tr>
+            <tr>
+              <td><strong>4. Projects</strong></td>
+              <td>مساحة العمل البرمجية؛ فولدر مستقل لكل فيديو بأكواد مشاهده وسيناريوهاته.</td>
+              <td>ملفات React / Remotion والتايم لاين</td>
+            </tr>
+            <tr>
+              <td><strong>5. Exports</strong></td>
+              <td>صالة التسليم النهائي للفيديوهات والصور المصغرة المعتمدة للنشر.</td>
+              <td>ملفات MP4 و PNG النهائية</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Chapter 3: Setup -->
+    <section class="chapter" id="setup">
+      <span class="chapter-tag">الخطوة التأسيسية (تنفذ مرة واحدة)</span>
+      <h2>الركن الأول: التثبيت وإعداد الاستوديو (`Setup_and_Tools`)</h2>
+      <p>
+        يفتح المستخدم مجلداً فارغاً في Antigravity، وينسخ هذا البرومبت، ليتولى الـ AI تثبيت كل البرامج والأدوات المطلوبة تلقائياً:
+      </p>
+
+      <div class="prompt-container">
+        <div class="prompt-header">
+          <span class="prompt-badge">PROMPT 01 — التثبيت الشامل الخارق</span>
+          <button class="copy-btn" onclick="copyPrompt(this)">
+            <span class="icon" style="width: 14px; height: 14px;"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></span>
+            <span>نسخ البرومبت</span>
+          </button>
+        </div>
+        <pre class="prompt-body">أنا عايزك تجهزلي بيئة عمل كاملة لإنتاج الفيديوهات والموشن جرافيك على لابتوبي من الصفر وبدون أي تدخل يدوي مني.
+
+المطلوب منك تنفذ الآتي بالترتيب:
+
+أولاً: أنشئلي في المكان ده 5 فولدرات أساسية فقط:
+1. Setup_and_Tools: (هيكون جواه كل أدوات البرمجة، بايثون، السكربتات، وتجهيز البيئة).
+2. Raw_Footage: (الفولدر اللي هحط فيه كل المادة الخام من فويس أوفر وموسيقى وفيديوهات مسجلة).
+3. Projects: (الفولدر اللي هيكون فيه شغل ومشاريع الفيديوهات ومحرك المونتاج Remotion).
+4. Reference: (الفولدر اللي هحط فيه المراجع والشغل اللي عايز أعمل زيه).
+5. Exports: (الفولدر اللي هيطلع فيه الفيديوهات والصور النهائية بعد ما تخلص).
+
+ثانياً: سطب الأدوات الناقصة على اللابتوب تلقائياً:
+- سطب Node.js و Python و FFmpeg لو مش موجودين على جهازي.
+- سطب في فولدر الـ Setup كل مكتبات بايثون المطلوبة (faster-whisper, yt-dlp, opencv-python, librosa, soundfile, pydub).
+- جهزلي مشروع المونتاج (Remotion) داخل فولدر Projects مع حزم الأنيميشن والأشكال (paths, shapes, transitions, tailwindcss, lucide-react).
+- حطلي سكربت بايثون في Setup_and_Tools لتفريغ أي فويس أوفر ويطلع توقيت الكلمات بالملي ثانية.
+
+ثالثاً: ضيفلي مهارات الموشن جرافيك الاحترافية (Video Skills):
+- أنشئلي داخل مجلد Setup_and_Tools مجلداً باسم (skills) وحط جواه ملفات تعليمات وأكواد جاهزة للمهارات الآتية:
+  1. kinetic_captions: كود وقواعد الكابشن المتزامن بدقة مع الصوت وإضاءة الكلمة.
+  2. motion_physics: معادلات الحركة المرنة (Spring animations) والانتقالات السينمائية في Remotion.
+  3. sfx_sync: قواعد المزامنة التلقائية للمؤثرات الصوتية (Whoosh, Pop, Click) مع كل حركة.
+
+رابعاً: لما تخلص قولي: "الاستوديو والمهارات اتسطبت وجاهزة بنسبة 100%، تحب نبدأ في أول فيديو إزاي؟"</pre>
+      </div>
+
+      <div class="alert alert-tip">
+        <span class="icon" style="width: 18px; height: 18px; color: var(--accent-amber);"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg></span>
+        <div><strong>ملاحظة تنفيذية:</strong> يتضمن هذا الأمر تثبيت مهارات الموشن (Skills) تلقائياً، بحيث يتوفر للـ AI مرجع دائم لكيفية بناء الحركات المطاطية والكابشن المتزامن دون أن يبتكر أكواداً بدائية.</div>
+      </div>
+    </section>
+
+    <!-- Chapter 4: Reference -->
+    <section class="chapter" id="reference">
+      <span class="chapter-tag">الركن الثاني</span>
+      <h2>الركن الثاني: الهوية والمراجع (`Reference`)</h2>
+      <p>
+        يقسم هذا المجلد إلى كيانين منفصلين: <strong>(1) خزينة هويتك الشخصية الثابتة</strong>، و <strong>(2) غرف المراجع المعزولة</strong>.
+      </p>
+
+      <!-- VISUAL TREE: REFERENCE -->
+      <div class="tree-box">
+        <div class="tree-box-header">
+          <span>خريطة هيكل مجلد المراجع والهوية</span>
+          <span style="font-family: 'Fira Code', monospace;">Reference/</span>
+        </div>
+        <div class="tree-list">
+          <div class="tree-row lvl-0">
+            <span class="tree-name folder-name">
+              <span class="icon" style="width: 16px; height: 16px;"><svg viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg></span>
+              Reference/
+            </span>
+            <span class="tree-badge highlight">المجلد الجذري للمراجع</span>
+          </div>
+
+          <div class="tree-row lvl-1">
+            <span class="tree-name folder-name">
+              <span class="icon" style="width: 15px; height: 15px;"><svg viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg></span>
+              00_My_Brand_Identity/
+            </span>
+            <span class="tree-badge highlight">هويتك وقواعدك الدائمة الثابتة</span>
+          </div>
+          <div class="tree-row lvl-2">
+            <span class="tree-name file-name">
+              <span class="icon" style="width: 14px; height: 14px;"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg></span>
+              identity_summary.md
+            </span>
+            <span class="tree-badge">ملخص الهوية بالعربي البسيط</span>
+          </div>
+          <div class="tree-row lvl-2">
+            <span class="tree-name file-name">
+              <span class="icon" style="width: 14px; height: 14px;"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg></span>
+              design_tokens.json
+            </span>
+            <span class="tree-badge">أكواد HEX للألوان والخطوط</span>
+          </div>
+          <div class="tree-row lvl-2">
+            <span class="tree-name file-name">
+              <span class="icon" style="width: 14px; height: 14px;"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg></span>
+              caption_preset.json
+            </span>
+            <span class="tree-badge">قواعد الكابشن المتزامن المعتمد</span>
+          </div>
+          <div class="tree-row lvl-2">
+            <span class="tree-name file-name">
+              <span class="icon" style="width: 14px; height: 14px;"><svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg></span>
+              visual_philosophy.md
+            </span>
+            <span class="tree-badge highlight">عناوين ورسوم توضيحية فقط</span>
+          </div>
+          <div class="tree-row lvl-2">
+            <span class="tree-name file-name">
+              <span class="icon" style="width: 14px; height: 14px;"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line></svg></span>
+              red_lines.md
+            </span>
+            <span class="tree-badge">الممنوعات والخطوط الحمراء</span>
+          </div>
+
+          <div class="tree-row lvl-1" style="margin-top: 6px;">
+            <span class="tree-name folder-name">
+              <span class="icon" style="width: 15px; height: 15px;"><svg viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg></span>
+              Reference_1/
+            </span>
+            <span class="tree-badge">غرفة المرجع الأول المستقلة</span>
+          </div>
+          <div class="tree-row lvl-2">
+            <span class="tree-name file-name">
+              <span class="icon" style="width: 14px; height: 14px;"><svg viewBox="0 0 24 24"><polygon points="23 7 16 12 23 17 23 7"></polygon><rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect></svg></span>
+              video.mp4
+            </span>
+            <span class="tree-badge">الفيديو المرجعي الأصلي</span>
+          </div>
+          <div class="tree-row lvl-2">
+            <span class="tree-name folder-name">
+              <span class="icon" style="width: 14px; height: 14px;"><svg viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg></span>
+              frames/
+            </span>
+            <span class="tree-badge">لقطات الشاشة المستخرجة</span>
+          </div>
+          <div class="tree-row lvl-2">
+            <span class="tree-name file-name">
+              <span class="icon" style="width: 14px; height: 14px;"><svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg></span>
+              motion_engine.md
+            </span>
+            <span class="tree-badge highlight">سر حركة الكروت والانتقالات</span>
+          </div>
+          <div class="tree-row lvl-2">
+            <span class="tree-name file-name">
+              <span class="icon" style="width: 14px; height: 14px;"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg></span>
+              visual_metaphors.md
+            </span>
+            <span class="tree-badge">بنك الرسوم والمخططات البيانية</span>
+          </div>
+
+          <div class="tree-row lvl-1" style="margin-top: 6px;">
+            <span class="tree-name folder-name">
+              <span class="icon" style="width: 15px; height: 15px;"><svg viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg></span>
+              Reference_2/
+            </span>
+            <span class="tree-badge">غرفة المرجع الثاني المعزولة...</span>
+          </div>
+        </div>
+      </div>
+
+      <h3 style="margin: 25px 0 12px; color: var(--text-title);">أ. برومبت المقابلة الشخصية لتثبيت الهوية</h3>
+
+      <div class="prompt-container">
+        <div class="prompt-header">
+          <span class="prompt-badge">PROMPT 02 — مقابلة تثبيت الهوية الشخصية</span>
+          <button class="copy-btn" onclick="copyPrompt(this)">
+            <span class="icon" style="width: 14px; height: 14px;"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></span>
+            <span>نسخ البرومبت</span>
+          </button>
+        </div>
+        <pre class="prompt-body">أريدك أن تلعب دور "المخرج الإبداعي ومصمم الهويات البصرية (Creative Director)". 
+أنا صانع محتوى وأريد تأسيس هويتي البصرية الثابتة والفريدة لجميع فيديوهاتي القادمة وحفظها في مجلد (Reference/00_My_Brand_Identity/).
+
+لا تسألني عن مصطلحات برمجية، بل قم بإجراء "مقابلة تفاعلية ذكية" معي وسؤالي أسئلة واضحة (مع اقتراح خيارات للاختيار منها) لتستكشف ذوقي وتفهم هويتي بدقة.
+
+المحاور التي أريدك أن تسألني عنها بالتتابع:
+1. [الخلفية والمظهر العام]: (هل أفضل خلفيات داكنة فخمة، شبكة تقنية Grid، تدرجات ملونة، تأثير 3D ضبابي، أم ورق وملمس ناعم؟).
+2. [كثافة الكلام مقابل الرسوم]: (أنا أفضل دائماً أن لا يحتوي الفيديو على نصوص كثيرة؛ أحب العناوين القوية والمركزة مع رسومات توضيحية ومخططات تشرح الكلام بصرياً — اسألني عن تفضيلاتي في شكل هذه الرسوم).
+3. [الألوان والروح]: (ما هي الألوان التي تعبر عني؟ الألوان الأساسية ولون التمييز ولون النصوص).
+4. [التايبوجرافي وشكل الكابشن]: (نوع الخط المفضل، وحجم العناوين، وكيف أريد أن يظهر الكابشن: هل الكلمة تنبض بلون التمييز؟ وهل يظهر شريط أم نصوص حرة؟).
+5. [العناصر الثابتة]: (هل لدي لوجو، أو صورة شخصية، أو طريقة ثابتة أختم بها الفيديو؟).
+6. [الخطوط الحمراء والممنوعات]: (ما هي الأشياء التي أكرهها وممنوع تظهر في فيديوهاتي إطلاقاً؟ مثل: ممنوع البراجرافات الطويلة، ممنوع الألوان الفاقعة، إلخ).
+
+ابدأ الآن بسؤالي أول محور، وانتظر إجابتي، وبعد أن ننتهي من كل الأسئلة، قم بتلخيص هويتي بالكامل وتأسيس ملفاتها وحفظها تلقائياً داخل (Reference/00_My_Brand_Identity/) وأخبرني أن هويتي أصبحت مثبتة للأبد.</pre>
+      </div>
+
+      <h3 style="margin: 30px 0 12px; color: var(--text-title);">ب. برومبت تشريح أي مرجع جديد</h3>
+
+      <div class="prompt-container">
+        <div class="prompt-header">
+          <span class="prompt-badge">PROMPT 03 — تشريح المرجع الإخراجي</span>
+          <button class="copy-btn" onclick="copyPrompt(this)">
+            <span class="icon" style="width: 14px; height: 14px;"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></span>
+            <span>نسخ البرومبت</span>
+          </button>
+        </div>
+        <pre class="prompt-body">أنا وضعت فيديو مرجعي جديد في مجلد Reference (اسمه أو رابطه: [اكتب اسم الفيديو هنا]).
+
+المطلوب منك:
+1. افحص المراجع السابقة وسمِّ هذا المرجع بالترتيب التلقائي (Reference_1، Reference_2... إلخ)، وأنشئ له مجلداً معزولاً خاصاً به وضع الفيديو جواه.
+2. استخدم FFmpeg واستخرج لقطات الشاشة في مجلد frames/.
+3. حلل هذا الفيديو من زاوية (الموشن جرافيكس وطريقة الشرح البصري فقط) دون أن تلتزم بموضوعه أو ألوانه:
+   - كيف شرح الأفكار الصعبة برسومات ومخططات بيانية بدلاً من الكلام؟
+   - كيف تظهر العناوين وتختفي؟
+   - ما هي سرعة الحركة والانتقالات بالملي ثانية؟
+   - كيف تم توزيع العناصر داخل الشاشة ليظل الكادر مريحاً للعين؟
+4. احفظ خلاصة هذه الصنعة الإخراجية داخل وثيقة (motion_engine.md) في مجلد هذا المرجع فقط.
+5. لا تعدل أي شيء في هويتي المحفوظة في (00_My_Brand_Identity).
+
+عندما تنتهي، لخص لي في 3 نقاط سر تميز حركة هذا الفيديو، وأكد لي حفظ المرجع بنجاح.</pre>
+      </div>
+    </section>
+
+    <!-- Chapter 5: Raw Footage -->
+    <section class="chapter" id="raw">
+      <span class="chapter-tag">الركن الثالث</span>
+      <h2>الركن الثالث: المادة الخام (`Raw_Footage`)</h2>
+      <p>المستودع الذي يستقبل التسجيلات الصوتية والفيديوهات المساعدة قبل دمجها:</p>
+
+      <!-- VISUAL TREE: RAW FOOTAGE -->
+      <div class="tree-box">
+        <div class="tree-box-header">
+          <span>خريطة هيكل المادة الخام</span>
+          <span style="font-family: 'Fira Code', monospace;">Raw_Footage/</span>
+        </div>
+        <div class="tree-list">
+          <div class="tree-row lvl-0">
+            <span class="tree-name folder-name">
+              <span class="icon" style="width: 16px; height: 16px;"><svg viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg></span>
+              Raw_Footage/
+            </span>
+            <span class="tree-badge highlight">المستودع الخام الكامل</span>
+          </div>
+
+          <div class="tree-row lvl-1">
+            <span class="tree-name folder-name">
+              <span class="icon" style="width: 15px; height: 15px;"><svg viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg></span>
+              audio/
+            </span>
+            <span class="tree-badge">المسارات الصوتية</span>
+          </div>
+          <div class="tree-row lvl-2">
+            <span class="tree-name folder-name">
+              <span class="icon" style="width: 14px; height: 14px;"><svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg></span>
+              voiceovers/
+            </span>
+            <span class="tree-badge highlight">ملف الفويس أوفر الأساسي (MP3/WAV)</span>
+          </div>
+          <div class="tree-row lvl-2">
+            <span class="tree-name folder-name">
+              <span class="icon" style="width: 14px; height: 14px;"><svg viewBox="0 0 24 24"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg></span>
+              music/
+            </span>
+            <span class="tree-badge">الموسيقى التصويرية الهادئة</span>
+          </div>
+          <div class="tree-row lvl-2">
+            <span class="tree-name folder-name">
+              <span class="icon" style="width: 14px; height: 14px;"><svg viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg></span>
+              sfx/
+            </span>
+            <span class="tree-badge">مؤثرات (Pop, Swoosh, Click)</span>
+          </div>
+
+          <div class="tree-row lvl-1">
+            <span class="tree-name folder-name">
+              <span class="icon" style="width: 15px; height: 15px;"><svg viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg></span>
+              video/
+            </span>
+            <span class="tree-badge">المرئيات المسجلة</span>
+          </div>
+          <div class="tree-row lvl-2">
+            <span class="tree-name folder-name">
+              <span class="icon" style="width: 14px; height: 14px;"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg></span>
+              screen_records/
+            </span>
+            <span class="tree-badge">تسجيلات الشاشة للشروحات</span>
+          </div>
+          <div class="tree-row lvl-2">
+            <span class="tree-name folder-name">
+              <span class="icon" style="width: 14px; height: 14px;"><svg viewBox="0 0 24 24"><polygon points="23 7 16 12 23 17 23 7"></polygon><rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect></svg></span>
+              b_roll/
+            </span>
+            <span class="tree-badge">لقطات خارجية توضيحية</span>
+          </div>
+
+          <div class="tree-row lvl-1">
+            <span class="tree-name folder-name">
+              <span class="icon" style="width: 15px; height: 15px;"><svg viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg></span>
+              assets/
+            </span>
+            <span class="tree-badge">صور ولوجوهات خاصة بالشرح</span>
+          </div>
+
+          <div class="tree-row lvl-1">
+            <span class="tree-name folder-name">
+              <span class="icon" style="width: 15px; height: 15px;"><svg viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg></span>
+              transcripts/
+            </span>
+            <span class="tree-badge highlight">ملفات التوقيت الزمني من Whisper</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="prompt-container">
+        <div class="prompt-header">
+          <span class="prompt-badge">PROMPT 04 — فحص وتفريغ الصوت بـ Whisper</span>
+          <button class="copy-btn" onclick="copyPrompt(this)">
+            <span class="icon" style="width: 14px; height: 14px;"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></span>
+            <span>نسخ البرومبت</span>
+          </button>
+        </div>
+        <pre class="prompt-body">أنا أضفت المادة الخام للفيديو الجديد داخل مجلد Raw_Footage.
+
+المطلوب منك:
+1. افحص ملف الصوت في (Raw_Footage/audio/voiceovers/) وقم بتطبيع وموازنة علو الصوت معيارياً (-16 LUFS).
+2. شغّل Whisper لاستخراج تفريغ الكلمات بدقة الملي ثانية (Word-level timestamps) واحفظ ملف الـ JSON والـ SRT داخل (Raw_Footage/transcripts/).
+3. افحص أي صور أو تسجيلات شاشة وضعتها في المجلد وجهزها للدمج في المشاهد.
+
+أخبرني فور الانتهاء بمدة الفويس أوفر وعدد الكلمات لنتقدم لخطوة بناء المشاهد.</pre>
+      </div>
+    </section>
+
+    <!-- Chapter 6: Projects -->
+    <section class="chapter" id="projects">
+      <span class="chapter-tag">الركن الرابع</span>
+      <h2>الركن الرابع: مشاريع الفيديوهات المعزولة (Clean Capsule Architecture)</h2>
+      <p>
+        يُنشئ الـ AI مجلداً مستقلاً لكل فيديو (مثل <code>Projects/Microservices/</code>) كـ <strong>كبسولة برمجية مغلقة بالكامل (Self-Contained Capsule)</strong>؛ بحيث يحتوي المجلد على كافة المشاهد، المكونات، والكابشن، ويبقى محرك <code>Projects/remotion/</code> نظيفاً ومجرداً كـ <strong>Runner نقي</strong> يستدعي الكومبوزيشن دون تراكم ملفات أو تداخل أنماط.
+      </p>
+
+      <!-- VISUAL TREE: PROJECTS -->
+      <div class="tree-box">
+        <div class="tree-box-header">
+          <span>خريطة هيكل الكبسولة المستقلة لمشاريع الفيديوهات</span>
+          <span style="font-family: 'Fira Code', monospace;">Projects/</span>
+        </div>
+        <div class="tree-list">
+          <div class="tree-row lvl-0">
+            <span class="tree-name folder-name">
+              <span class="icon" style="width: 16px; height: 16px;"><svg viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg></span>
+              Projects/
+            </span>
+            <span class="tree-badge highlight">مستودع الكبسولات البرمجية</span>
+          </div>
+
+          <div class="tree-row lvl-1" style="margin-top: 6px;">
+            <span class="tree-name folder-name">
+              <span class="icon" style="width: 15px; height: 15px;"><svg viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg></span>
+              Microservices/
+            </span>
+            <span class="tree-badge highlight">كبسولة الفيديو المستقلة بالكامل</span>
+          </div>
+          <div class="tree-row lvl-2">
+            <span class="tree-name file-name">
+              <span class="icon" style="width: 14px; height: 14px;"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg></span>
+              storyboard.md
+            </span>
+            <span class="tree-badge">السيناريو الإخراجي وتوزيع المشاهد</span>
+          </div>
+          <div class="tree-row lvl-2">
+            <span class="tree-name folder-name">
+              <span class="icon" style="width: 14px; height: 14px;"><svg viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg></span>
+              src/
+            </span>
+            <span class="tree-badge highlight">أكواد الكبسولة التنفيذية كاملة</span>
+          </div>
+          <div class="tree-row lvl-3">
+            <span class="tree-name file-name">
+              <span class="icon" style="width: 14px; height: 14px;"><svg viewBox="0 0 24 24"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg></span>
+              index.ts
+            </span>
+            <span class="tree-badge">نقطة التصدير الموحدة للكومبوزيشن</span>
+          </div>
+          <div class="tree-row lvl-3">
+            <span class="tree-name file-name">
+              <span class="icon" style="width: 14px; height: 14px;"><svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"></rect><line x1="7" y1="2" x2="7" y2="22"></line><line x1="17" y1="2" x2="17" y2="22"></line><line x1="2" y1="12" x2="22" y2="12"></line><line x1="2" y1="7" x2="7" y2="7"></line><line x1="2" y1="17" x2="7" y2="17"></line><line x1="17" y1="17" x2="22" y2="17"></line><line x1="17" y1="7" x2="22" y2="7"></line></svg></span>
+              MainCompositionMicroservices.tsx
+            </span>
+            <span class="tree-badge">المجمع الرئيسي لتايم لاين الفيديو</span>
+          </div>
+          <div class="tree-row lvl-3">
+            <span class="tree-name folder-name">
+              <span class="icon" style="width: 14px; height: 14px;"><svg viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg></span>
+              scenes/
+            </span>
+            <span class="tree-badge highlight">المشاهد الثمانية الكاملة (Scene01 - Scene08)</span>
+          </div>
+          <div class="tree-row lvl-3">
+            <span class="tree-name folder-name">
+              <span class="icon" style="width: 14px; height: 14px;"><svg viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg></span>
+              components/
+            </span>
+            <span class="tree-badge">المكونات الهندسية، الرسوم الحية، والكابشن</span>
+          </div>
+
+          <div class="tree-row lvl-1" style="margin-top: 10px;">
+            <span class="tree-name folder-name">
+              <span class="icon" style="width: 15px; height: 15px;"><svg viewBox="0 0 24 24"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg></span>
+              remotion/
+            </span>
+            <span class="tree-badge highlight">محرك التشغيل والرندر النقي (Pure Runner Engine)</span>
+          </div>
+          <div class="tree-row lvl-2">
+            <span class="tree-name file-name">
+              <span class="icon" style="width: 14px; height: 14px;"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg></span>
+              src/Root.tsx
+            </span>
+            <span class="tree-badge">استدعاء مباشر من كبسولة المشروع: import from "../../Microservices/src"</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="prompt-container">
+        <div class="prompt-header">
+          <span class="prompt-badge">PROMPT 05 — بناء الفيديو المدمج في فولدَره</span>
+          <button class="copy-btn" onclick="copyPrompt(this)">
+            <span class="icon" style="width: 14px; height: 14px;"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></span>
+            <span>نسخ البرومبت</span>
+          </button>
+        </div>
+        <pre class="prompt-body">أريدك أن تنشئ مشروع فيديو جديد داخل مجلد Projects.
+
+بيانات الفيديو:
+- اسم المشروع: Video_01_[اكتب اسم الموضوع باختصار بالإنجليزية].
+- موضوع الفيديو أو الفويس أوفر: [اكتب النص أو الفكرة أو مسار الصوت في Raw_Footage].
+- الهوية المعتمدة: التزم بهويتي الثابتة في (Reference/00_My_Brand_Identity).
+- أسلوب الموشن والإخراج: التزم بأسلوب الرسوم والموشن من [اكتب اسم المرجع مثلاً: Reference_1].
+
+المطلوب:
+1. أنشئ مجلد الفيديو المستقل: Projects/Video_XX_Name/
+2. صمم المشاهد مشهداً بمشهد (Scenes) معتمداً على (عناوين ورسوم توضيحية بيانية فقط وبدون نصوص طويلة).
+3. سجل التايم لاين والسيناريو داخل storyboard.md و timeline.json داخل المجلد.
+4. سجله كفيديو جديد في Remotion ليظهر في قائمة المعاينة فوراً.
+
+أخبرني فور اكتمال البرمجة برابط معاينة الفيديو على اللوكال هوست.</pre>
+      </div>
+    </section>
+
+    <!-- Chapter 7: Remotion Studio Preview -->
+    <section class="chapter" id="remotion-studio">
+      <span class="chapter-tag">محطة المعاينة والتعديل الفوري</span>
+      <h2>المعاينة التفاعلية المباشرة عبر استوديو Remotion</h2>
+      <p>
+        أكبر ميزة في هذا النظام أنك لست بحاجة للانتظار حتى انتهاء رندر الفيديو لمشاهدة النتيجة؛ بمجرد أن ينهي الـ AI برمجة المشاهد، تفتح <strong>Remotion Studio</strong> في المتصفح لتشاهد الفيديو وتعدل عليه لحظياً!
+      </p>
+
+      <div class="card" style="margin: 20px 0;">
+        <div class="card-title">
+          <span class="icon" style="width: 18px; height: 18px; color: var(--accent-coral);"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg></span>
+          كيف تفتح استوديو المعاينة على جهازك؟
+        </div>
+        <p style="color: var(--text-body); margin-bottom: 12px;">
+          اطلب من الـ AI تشغيل الاستوديو، أو اكتب في شاشة الأوامر:
+        </p>
+        <div style="background: var(--bg-code); color: #F5F1EB; padding: 12px 18px; border-radius: 8px; font-family: 'Fira Code', monospace; font-size: 13px; direction: ltr; text-align: left;">
+          npm run dev
+        </div>
+      </div>
+
+      <!-- VISUAL STUDIO MOCKUP -->
+      <div class="studio-mockup">
+        <div class="studio-topbar">
+          <div class="studio-dots"><span></span><span></span><span></span></div>
+          <div class="studio-url-pill">http://localhost:3000 — Remotion Studio Player</div>
+        </div>
+        <div class="studio-body">
+          <div class="studio-sidebar-panel">
+            <div class="studio-panel-title">قائمة الفيديوهات (Compositions)</div>
+            <div class="studio-comp-item active">
+              <span class="icon" style="width: 14px; height: 14px;"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg></span>
+              Video_01_AI_Tools
+            </div>
+            <div class="studio-comp-item">
+              <span class="icon" style="width: 14px; height: 14px;"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg></span>
+              Video_02_Python_Tips
+            </div>
+            <div class="studio-comp-item">
+              <span class="icon" style="width: 14px; height: 14px;"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg></span>
+              Video_03_Database_Guide
+            </div>
+          </div>
+          <div class="studio-main-viewport">
+            <div class="studio-player-screen">
+              <span class="icon" style="width: 28px; height: 28px; color: var(--accent-coral);"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg></span>
+            </div>
+            <div class="studio-timeline-bar">
+              <span>Frame: 142 / 900 (30 fps)</span>
+              <span>Speed: 1x</span>
+              <span>Zoom: Fit</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="alert alert-tip">
+        <span class="icon" style="width: 18px; height: 18px; color: var(--accent-amber);"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg></span>
+        <div><strong>ميزة التحديث اللحظي (Hot Reload):</strong> أي تعديل تطلبه من الـ AI على ألوان المشهد، أو سرعة حركة الكارت، يظهر في شاشة المتصفح أمامك فوراً دون الحاجة لإعادة تشغيل أو انتظار رندر!</div>
+      </div>
+    </section>
+
+    <!-- Chapter 8: Exports -->
+    <section class="chapter" id="exports">
+      <span class="chapter-tag">الركن الخامس</span>
+      <h2>الركن الخامس: صالة التسليم والتصدير (`Exports`)</h2>
+      <p>يستقبل المخرجات النهائية المنتهية فقط مقسمة بحسب صيغة العرض:</p>
+
+      <!-- VISUAL TREE: EXPORTS -->
+      <div class="tree-box">
+        <div class="tree-box-header">
+          <span>خريطة هيكل المخرجات النهائية</span>
+          <span style="font-family: 'Fira Code', monospace;">Exports/</span>
+        </div>
+        <div class="tree-list">
+          <div class="tree-row lvl-0">
+            <span class="tree-name folder-name">
+              <span class="icon" style="width: 16px; height: 16px;"><svg viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg></span>
+              Exports/
+            </span>
+            <span class="tree-badge highlight">صالة التسليم النهائي</span>
+          </div>
+
+          <div class="tree-row lvl-1">
+            <span class="tree-name folder-name">
+              <span class="icon" style="width: 15px; height: 15px;"><svg viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg></span>
+              shorts_reels/
+            </span>
+            <span class="tree-badge highlight">مقاس 9:16 (1080×1920) للموبايل</span>
+          </div>
+          <div class="tree-row lvl-2">
+            <span class="tree-name file-name">
+              <span class="icon" style="width: 14px; height: 14px;"><svg viewBox="0 0 24 24"><polygon points="23 7 16 12 23 17 23 7"></polygon><rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect></svg></span>
+              Video_01_AI_Tools.mp4
+            </span>
+            <span class="tree-badge">فيديو جاهز للنشر الفوري</span>
+          </div>
+
+          <div class="tree-row lvl-1">
+            <span class="tree-name folder-name">
+              <span class="icon" style="width: 15px; height: 15px;"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg></span>
+              youtube_full/
+            </span>
+            <span class="tree-badge">مقاس 16:9 (1920×1080) للشاشات العريضة</span>
+          </div>
+
+          <div class="tree-row lvl-1">
+            <span class="tree-name folder-name">
+              <span class="icon" style="width: 15px; height: 15px;"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg></span>
+              thumbnails/
+            </span>
+            <span class="tree-badge highlight">صور مصغرة للغلاف PNG فائقة الدقة</span>
+          </div>
+          <div class="tree-row lvl-2">
+            <span class="tree-name file-name">
+              <span class="icon" style="width: 14px; height: 14px;"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg></span>
+              Video_01_AI_Tools_thumb.png
+            </span>
+            <span class="tree-badge">غلاف متطابق مع هوية الفيديو</span>
+          </div>
+
+          <div class="tree-row lvl-1">
+            <span class="tree-name folder-name">
+              <span class="icon" style="width: 15px; height: 15px;"><svg viewBox="0 0 24 24"><polyline points="21 8 21 21 3 21 3 8"></polyline><rect x="1" y="3" width="22" height="5"></rect><line x1="10" y1="12" x2="14" y2="12"></line></svg></span>
+              archive/
+            </span>
+            <span class="tree-badge">النسخ والمسودات السابقة</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="prompt-container">
+        <div class="prompt-header">
+          <span class="prompt-badge">PROMPT 06 — أمر الرندر والتصدير الفوري</span>
+          <button class="copy-btn" onclick="copyPrompt(this)">
+            <span class="icon" style="width: 14px; height: 14px;"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></span>
+            <span>نسخ البرومبت</span>
+          </button>
+        </div>
+        <pre class="prompt-body">رندر لي مشروع [Video_01_AI_Tools] بأعلى جودة بصيغة MP4 وطلعه في مجلد (Exports/shorts_reels/)، واعملي معاه صورة مصغرة (Thumbnail) للغلاف في مجلد (Exports/thumbnails/) وافتح لي مسار الفيديو فور الانتهاء.</pre>
+      </div>
+    </section>
+
+    <!-- Chapter 9: Daily Workflow -->
+    <section class="chapter" id="workflow">
+      <span class="chapter-tag">الملخص العملي</span>
+      <h2>مسار الإنتاج اليومي في 4 خطوات</h2>
+
+      <div class="card" style="border-right: 4px solid var(--accent-coral);">
+        <div class="card-title">1. وضع الصوت وتفريغه</div>
+        <p style="color: var(--text-body);">ضع الفويس أوفر في <code>Raw_Footage/audio/voiceovers/</code> وأرسل برومبت التفريغ لاستخراج توقيت الكلمات بـ Whisper.</p>
+      </div>
+
+      <div class="card" style="border-right: 4px solid var(--accent-coral-bright);">
+        <div class="card-title">2. تحديد المرجع</div>
+        <p style="color: var(--text-body);">اختر رقم المرجع الملهم من <code>Reference/</code> لاستعارة أسلوب حركته ومخططاته البيانية.</p>
+      </div>
+
+      <div class="card" style="border-right: 4px solid var(--accent-amber);">
+        <div class="card-title">3. إنشاء مشروع الفيديو المدمج</div>
+        <p style="color: var(--text-body);">أرسل برومبت بناء الفيديو (PROMPT 05)، فينشئ الـ AI فولدَره الخاص في <code>Projects/</code> ويدمج هويتك مع أسلوب حركة المرجع.</p>
+      </div>
+
+      <div class="card" style="border-right: 4px solid var(--success);">
+        <div class="card-title">4. الرندر والتسليم النهائي</div>
+        <p style="color: var(--text-body);">أرسل برومبت الرندر (PROMPT 06)، فيصدر الفيديو بصيغة MP4 وصورته المصغرة PNG داخل مجلد <code>Exports/</code> جاهزاً للنشر.</p>
+      </div>
+    </section>
+
+    <!-- Chapter 10: Master Intake Prompt -->
+    <section class="chapter" id="master-prompt">
+      <span class="chapter-tag">الإنتاج بضربة واحدة</span>
+      <h2>البرومبت الاحترافي الذكي المانع للتكرار (Master Video Intake Prompt)</h2>
+      <p>
+        لكي تنتج أي فيديو دون الدخول في دوامة المراجعات والتعديلات المتكررة، يجمع هذا البرومبت الشامل كافة القواعد الإخراجية والهندسية الثابتة للأستاذ أحمد خميس. انسخ البرومبت بالكامل واملأ حقوله لبدء المشروع مباشرة ككبسولة معزولة بالكامل:
+      </p>
+
+      <div class="prompt-container" style="margin: 25px 0;">
+        <div class="prompt-header">
+          <span class="prompt-badge">PROMPT MASTER — برومبت الإنتاج الشامل بضربة واحدة</span>
+          <button class="copy-btn" onclick="copyPrompt(this)">
+            <span class="icon" style="width: 14px; height: 14px;"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></span>
+            <span>نسخ البرومبت الشامل</span>
+          </button>
+        </div>
+        <pre class="prompt-body">بصفتك المخرج التقني والإبداعي (Creative Technical Director) لاستوديو الفيديو البرمجي، قم بإنشاء وإخراج فيديو موشن جرافيكس سينمائي احترافي جديد وفق الهوية البصرية الرسمية والمعمارية النظيفة للكبسولة المعزولة، مع الالتزام التام والكامل بالبيانات والمحددات التالية:
+
+1. [بيانات الفيديو ومسارات الملفات]:
+   - اسم المشروع / المجلد: Projects/Video_[اسم_الموضوع_بالإنجليزي]
+   - ملف الفويس أوفر (Audio): Raw_Footage/audio/voiceovers/[اسم_الملف].mp3
+   - ملف تفريغ Whisper الزمني: Raw_Footage/transcripts/[اسم_الملف].json
+   - مقاس الشاشة: 1080x1920 (Shorts/Reels 9:16) بمعدل 30 FPS.
+
+2. [العناوين والتايبوجرافي (Free Floating Typography)]:
+   - العناوين الرئيسية حرة تماماً في أعلى الشاشة وبدون أي بوكسات أو حاويات أو خلفيات ملونة خلفها.
+   - النص ثقيل وفخم بصرياً (Cairo 800/900).
+   - كتابة المصطلحات التقنية والمعمارية البرمجية بالإنجليزية بخط عريض، مع ترجمة توجيهية عربية خفيفة فقط.
+
+3. [التمثيل البصري الحي والتحول التفاعلي (Literal Visual Simulation)]:
+   - ممنوع منعاً باتاً وضع بطاقات مستطيلة تحتوي كلاماً كبديل عن الرسم.
+   - ارسم المكون الحقيقي المذكور نصاً (ذكر كمبيوتر -> رسم كمبيوتر، ذكر معالج -> رسم CPU ومسارات نحاسية، ذكر كود -> رسم نافذة كود مصغرة، ذكر داتابيز -> رسم أسطوانة قاعدة بيانات، ذكر راوتر وهاتف -> رسمهما مع تدفق حزم البيانات).
+   - المشهد حي وتفاعلي (Interactive Dynamic State): إذا قيل "قسمنا" تنقسم الكتلة أمام المشاهد، إذا قيل "تواصل" تتدفق النبضات فوراً.
+   - ممنوع المشاهد الثابتة (Zero Static Scenes): المشهد يتحول ويتفاعل مع كل جملة صوتية.
+
+4. [سياسة الإيموجي الصارمة (Strictly Zero Emojis)]:
+   - استخدام حصري لأيقونات الفيكتور الهندسية البرمجية الدقيقة (SVG). ممنوع استخدام أي إيموجي على الإطلاق.
+
+5. [المقارنات والمميزات والعيوب (Pure Visual Metaphors)]:
+   - تمثيل المفاضلة بصرياً بميزان ميكانيكي هندسي أو مؤشرات سرعة أو أدوات فحص فيكتور، دون سرد بطاقات وقوائم نقطية.
+   - إذا لزم وجود مؤشر، يكون كلمة واحدة فقط حرة بدون خلفية (مثل: المميزات • / العيوب •).
+
+6. [تسلسل الظهور التدريجي الختامي (Sequential Progressive CTA)]:
+   - في مشهد الختام ودعوة التفاعل، الالتزام الصارم بالظهور التدريجي على 3 مراحل متزامنة مع الصوت:
+     المرحلة الأولى: تظهر فقط المنصات/الخيارات للمقارنة، مع زوم وتوهج منفرد لكل خيار لحظة نطق اسمه.
+     المرحلة الثانية: عند نطق "اكتبلي في الكومنتات" يظهر صندوق التعليق العصري ويكتب تلقائياً أمامه.
+     المرحلة الثالثة: عند نطق "واعمل فولو وسيف" تظهر أزرار المتابعة والحفظ والمشاركة وتتفعل فورياً.
+
+7. [الكابشن الحركي وشريط التقدم]:
+   - كابشن كاريوكي حر في الثلث السفلي بدون أي خلفية أو صندوق، بخط معتدل (32px)، وتتلون الكلمة الحالية لحظة نطقها بلون التيراكوتا (#D65A2C).
+   - شريط تقدم سفلي تماماً مع كرة ثلاثية الأبعاد (بيلية متدحرجة مجسمة بتظليل واقعي) تسير طوال مدة الفيديو.
+
+8. [الخلفية الهندسية الحية (The Living Architectural Canvas)]:
+   - أرضية دافئة بلون الورق الهندسي (#F4EFEB)، مع تنفس ضوئي وتدرجات ناعمة في الزوايا، وحزم بيانات ونبضات ضوئية ميكروية تسير بهدوء على خطوط الـ Blueprint Grid، ونبضات لعلامات التقاطع (+).
+
+9. [المعمارية النظيفة وحذف المعاينات المؤقتة]:
+   - بناء وتوطين كافة أكواد ومشاهد المشروع بالكامل ككبسولة مستقلة داخل مجلد [Projects/Video_XX_Name/src/].
+   - الإبقاء على مجلد Projects/remotion كـ Pure Runner نقي لا تتراكم داخله ملفات المشاهد.
+   - أي لقطة معاينة (Preview still) تؤخذ لفحص العمل، تُحذف وتُمحى فوراً ولا يُترك أي ملفات صور مؤقتة محفوظة.</pre>
+      </div>
+
+      <!-- CARDS FOR THE 9 PILLARS -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-top: 25px;">
+        <div class="card" style="border-right: 3px solid var(--accent-coral);">
+          <div class="card-title">1. التايبوجرافي الحر (Free Typography)</div>
+          <p style="color: var(--text-body); font-size: 13.5px;">العناوين تطفو بحرية تامة دون بوكسات أو حاويات، بوزن ثقيل (Cairo 800/900)، والمصطلحات البرمجية بالإنجليزية.</p>
+        </div>
+        <div class="card" style="border-right: 3px solid var(--accent-coral-bright);">
+          <div class="card-title">2. المحاكاة البصرية الحية (Literal Simulation)</div>
+          <p style="color: var(--text-body); font-size: 13.5px;">رسم الشيء المنطوق حرفياً (كمبيوتر، CPU، سيرفرات، كود، قواعد بيانات)، مع تحول تفاعلي ومنع المشاهد الثابتة.</p>
+        </div>
+        <div class="card" style="border-right: 3px solid #EF4444;">
+          <div class="card-title">3. صفر إيموجي (Strictly Zero Emojis)</div>
+          <p style="color: var(--text-body); font-size: 13.5px;">حظر كامل للإيموجي واستبدالها حصرياً بأيقونات فيكتور هندسية SVG عالية النقاء والاحترافية.</p>
+        </div>
+        <div class="card" style="border-right: 3px solid var(--accent-amber);">
+          <div class="card-title">4. المقارنات البصرية (Visual Metaphors)</div>
+          <p style="color: var(--text-body); font-size: 13.5px;">المفاضلة بميزان ميكانيكي هندسي وأدوات فحص بدلاً من قوائم وبطاقات النصوص التكرارية.</p>
+        </div>
+        <div class="card" style="border-right: 3px solid #10B981;">
+          <div class="card-title">5. الظهور التدريجي الختامي (Sequential CTA)</div>
+          <p style="color: var(--text-body); font-size: 13.5px;">ظهور متسلسل: المنصات أولاً، ثم صندوق التعليق مع الكتابة الحية، ثم أزرار المتابعة والحفظ.</p>
+        </div>
+        <div class="card" style="border-right: 3px solid var(--accent-coral);">
+          <div class="card-title">6. كابشن كاريوكي وبيلية التقدم</div>
+          <p style="color: var(--text-body); font-size: 13.5px;">كابشن حر بلون التيراكوتا (#D65A2C) بحجم 32px، وبيلية ثلاثية الأبعاد تتدحرج أسفل الشاشة.</p>
+        </div>
+        <div class="card" style="border-right: 3px solid #0284C7;">
+          <div class="card-title">7. الخلفية الهندسية الحية (Living Canvas)</div>
+          <p style="color: var(--text-body); font-size: 13.5px;">تنفس ضوئي استوديو ناعم، حزم بيانات ميكروية تتدفق عبر خطوط الشبكة، ونبضات لعلامات التقاطع (+).</p>
+        </div>
+        <div class="card" style="border-right: 3px solid #8B5CF6;">
+          <div class="card-title">8. الكبسولة المعزولة (Clean Capsule)</div>
+          <p style="color: var(--text-body); font-size: 13.5px;">كل فيديو يملك مجلده الخاص بملفاته ومكوناته، ومحرك Remotion يظل نظيفاً ومجرداً كـ Runner.</p>
+        </div>
+        <div class="card" style="border-right: 3px solid var(--text-title);">
+          <div class="card-title">9. صفر صور متبقية (Zero Preview Leftovers)</div>
+          <p style="color: var(--text-body); font-size: 13.5px;">الحذف اللحظي والتلقائي لكافة صور وفريمات المعاينة المؤقتة لحماية مجلدات المشروع من الفوضى.</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    // Copy functionality
+    function copyPrompt(button) {
+      const container = button.closest('.prompt-container');
+      const text = container.querySelector('pre.prompt-body').innerText;
+      
+      navigator.clipboard.writeText(text).then(() => {
+        const textSpan = button.querySelector('span:last-child');
+        const orig = textSpan.innerText;
+        textSpan.innerText = 'تم النسخ!';
+        button.classList.add('copied');
+        setTimeout(() => {
+          textSpan.innerText = orig;
+          button.classList.remove('copied');
+        }, 2200);
+      });
+    }
+
+    // Interactive 12-Slide Master Deck
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.slide-card');
+    const dots = document.querySelectorAll('.slider-dots .dot');
+    const indicator = document.getElementById('slideIndicator');
+
+    function updateSlider(idx) {
+      if (!slides.length) return;
+      slides.forEach((s, i) => s.classList.toggle('active', i === idx));
+      dots.forEach((d, i) => d.classList.toggle('active', i === idx));
+      if (indicator) {
+        indicator.innerText = 'شريحة ' + (idx + 1) + ' من ' + slides.length;
+      }
+      currentSlide = idx;
+    }
+
+    function nextSlide() {
+      if (!slides.length) return;
+      let next = (currentSlide + 1) % slides.length;
+      updateSlider(next);
+    }
+
+    function prevSlide() {
+      if (!slides.length) return;
+      let prev = (currentSlide - 1 + slides.length) % slides.length;
+      updateSlider(prev);
+    }
+
+    function goToSlide(idx) {
+      updateSlider(idx);
+    }
+
+    // Fullscreen Mode Toggle
+    function toggleFullscreen() {
+      const slider = document.getElementById('presentation-deck');
+      if (!document.fullscreenElement) {
+        if (slider.requestFullscreen) {
+          slider.requestFullscreen();
+        } else if (slider.webkitRequestFullscreen) {
+          slider.webkitRequestFullscreen();
+        }
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        }
+      }
+    }
+
+    // Keyboard Shortcuts for Presentation
+    document.addEventListener('keydown', (e) => {
+      // Avoid intercepting input/textarea
+      if (['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) return;
+
+      if (e.key === 'ArrowLeft' || e.code === 'Space' || e.key === 'PageDown') {
+        nextSlide();
+      } else if (e.key === 'ArrowRight' || e.key === 'PageUp') {
+        prevSlide();
+      } else if (e.key.toLowerCase() === 'f') {
+        toggleFullscreen();
+      }
+    });
+
+    // Scroll active link highlight
+    window.addEventListener('DOMContentLoaded', () => {
+      const sections = document.querySelectorAll('section.chapter');
+      const navLinks = document.querySelectorAll('nav.toc-nav a');
+
+      window.addEventListener('scroll', () => {
+        let current = '';
+        sections.forEach(section => {
+          if (pageYOffset >= section.offsetTop - 120) {
+            current = section.getAttribute('id');
+          }
+        });
+
+        navLinks.forEach(link => {
+          link.classList.toggle('active', link.getAttribute('href') === '#' + current);
+        });
+      });
+    });
+  </script>
+</body>
+</html>

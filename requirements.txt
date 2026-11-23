@@ -1,0 +1,6 @@
+faster-whisper>=1.0.0
+yt-dlp
+opencv-python
+librosa
+soundfile
+pydub
